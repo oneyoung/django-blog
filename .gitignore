@@ -1,0 +1,4 @@
+.*
+*.pyc
+db/
+blogsite/config.py
