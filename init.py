@@ -13,7 +13,7 @@ SECRET_KEY = 'YOUR_SECRET_KEY_HERE'
 '''
 config_path = os.path.join(project_dir, "blogsite/config.py")
 if not os.path.exists(config_path):
-    f = open(config_path)
+    f = open(config_path, 'w')
     f.write(config)
     f.close()
 
