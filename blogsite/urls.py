@@ -5,6 +5,7 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^login/', 'blog.views.admin_login'),
     # Examples:
     # url(r'^$', 'blogsite.views.home', name='home'),
     # url(r'^blogsite/', include('blogsite.foo.urls')),
