@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django import forms
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 
 
 class AdminUserForm(forms.Form):
@@ -19,7 +19,8 @@ def admin_login(request):
             password = form.cleaned_data['password']
             user = authenticate(username=username, password=password)
             if user is not None:
-                if user.is_superuser:
+                if user.is_superuser and user.is_active:
+                    login(request, user)
                     return HttpResponseRedirect('/admin/')
         msg = "Invalid username or password, please try again."
     f = AdminUserForm()
