@@ -11,6 +11,7 @@ class AdminUserForm(forms.Form):
 
 
 def admin_login(request):
+    msg = ""
     if request.method == 'POST':
         form = AdminUserForm(request.POST)
         if form.is_valid():
@@ -20,5 +21,6 @@ def admin_login(request):
             if user is not None:
                 if user.is_superuser:
                     return HttpResponseRedirect('/admin/')
+        msg = "Invalid username or password, please try again."
     f = AdminUserForm()
-    return render(request, 'login.html', {'form': f})
+    return render(request, 'login.html', {'form': f, 'msg':msg})
