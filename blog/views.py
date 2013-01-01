@@ -14,7 +14,11 @@ def admin_login(request):
     if request.method == 'POST':
         form = AdminUserForm(request.POST)
         if form.is_valid():
-            user = AdminUserForm.cleaned_date
-    else:
-        f = AdminUserForm()
-        return render(request, 'login.html', {'form': f})
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_superuser:
+                    return HttpResponseRedirect('/admin/')
+    f = AdminUserForm()
+    return render(request, 'login.html', {'form': f})
