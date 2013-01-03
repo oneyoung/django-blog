@@ -1,6 +1,13 @@
 #!/usr/bin/python2
 import os
 
+try:
+    import django_evolution
+except:
+    print ("django_evoluton not found")
+    print ("run: `easy_install -U django_evolution` to install")
+    exit(1)
+
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 

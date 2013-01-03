@@ -130,6 +130,16 @@ INSTALLED_APPS = (
 ./manage.py syncdb
 ```
 
+#### 数据库同步问题
+当你修改`models.py` 里的数据库模型时候, 运行`./manage.py syncdb` 可能不会真正起作用. 详情请猛击[这里](http://stackoverflow.com/questions/1605662/django-syncdb-and-an-updated-model). <br />
+StackoverFlow 的回答里提供了两种方法: [Sounth](http://south.aeracode.org/) 和 [Django Evolution](http://code.google.com/p/django-evolution/). 我使用的是后者.
+
+* 安装: `easy_install -U django_evolution`
+* 初始化:
+	1. 添加`diango_evolution` 到`INSTALLED_APPS`
+	2. 运行`./manage.py syncdb`
+* 使用: 每次使用时, 运行 `./manage.py evolve --hint --execute`
+
 ### 模板
 ####基本语法
 * *block tag* - 在`{%`和`%}` 之间, 可以内嵌一些处理语句: <br />
