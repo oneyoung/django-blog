@@ -10,7 +10,12 @@ class Blog(models.Model):
     date_create = models.DateTimeField(auto_now_add=True)
     date_modify = models.DateTimeField(auto_now=True)
     body_html = models.TextField()
-    body_md = models.TextField(blank=True, null=True)
+    body_raw = models.TextField(blank=True, null=True)
+    RAW_FORMAT_CHOICES = (
+        ('html', 'HTML Format'),
+        ('md', 'Markdown'),
+    )
+    raw_format = models.CharField(max_length=10, choices=RAW_FORMAT_CHOICES, default='html')
     #comment = models.OneToOneField(Comment)
 
     def __unicode__(self):
