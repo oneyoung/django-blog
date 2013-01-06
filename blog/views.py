@@ -41,3 +41,9 @@ def blog_view(request, **kwargs):
         return http.HttpResponse("%s" % blog.body_html)
     except:
         raise http.Http404
+
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = ('title', 'body_raw', 'raw_format')
