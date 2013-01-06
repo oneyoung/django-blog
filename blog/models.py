@@ -22,6 +22,8 @@ class Blog(models.Model):
         return self.title
 
     def save(self, **kwargs):
+        if self.raw_format == 'html' and self.body_raw:
+            self.body_html = self.body_raw
         self.full_clean()
         models.Model.save(self, **kwargs)
 

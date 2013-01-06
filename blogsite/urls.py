@@ -6,6 +6,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     url(r'^login/', 'blog.views.admin_login'),
+    url(r'^admin/post/', 'blog.views.post_blog'),
     url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/(?P<title>.+)/', 'blog.views.blog_view', name='blog_view'),
     # Examples:
     # url(r'^$', 'blogsite.views.home', name='home'),
