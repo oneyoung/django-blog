@@ -3,8 +3,6 @@ from django.shortcuts import render
 from django import http
 from django import forms
 from django.contrib.auth import authenticate, login
-from django.utils import encoding
-import urllib
 from models import Blog
 
 
@@ -33,10 +31,10 @@ def admin_login(request):
 def blog_view(request, **kwargs):
     year = int(kwargs.get('year', 0))
     month = int(kwargs.get('month', 0))
-    title = encoding.smart_unicode(urllib.unquote(kwargs.get('title', '')))
+    slug = kwargs.get('slug', '')
 
     try:
-        blog = Blog.objects.get(title=title, date_create__year=year,
+        blog = Blog.objects.get(slug=slug, date_create__year=year,
                                 date_create__month=month)
         return http.HttpResponse("%s" % blog.body_html)
     except:
@@ -46,7 +44,6 @@ def blog_view(request, **kwargs):
 class BlogForm(forms.ModelForm):
     class Meta:
         model = Blog
-        fields = ('title', 'body_raw', 'raw_format')
 
 
 def post_blog(request):

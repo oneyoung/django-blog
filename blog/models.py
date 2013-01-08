@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import encoding
 
 
 class Comment(models.Model):
@@ -6,7 +7,8 @@ class Comment(models.Model):
 
 
 class Blog(models.Model):
-    title = models.CharField(max_length=255, unique_for_month='date_create')
+    slug = models.SlugField(max_length=255, editable=False, unique_for_month='date_create')
+    title = models.CharField(max_length=255)
     date_create = models.DateTimeField(auto_now_add=True)
     date_modify = models.DateTimeField(auto_now=True)
     body_html = models.TextField()
@@ -22,6 +24,8 @@ class Blog(models.Model):
         return self.title
 
     def save(self, **kwargs):
+        if not self.slug:  # new object here
+            self.slug = self.title
         if self.raw_format == 'html' and self.body_raw:
             self.body_html = self.body_raw
         self.full_clean()
@@ -32,4 +36,4 @@ class Blog(models.Model):
         return ('blog_view', (), {
             'year': self.date_create.strftime('%Y'),
             'month': self.date_create.strftime('%m'),
-            'title': self.title})
+            'slug': self.slug})
