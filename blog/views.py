@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 # Create your views here.
 from django.shortcuts import render
 from django import http
@@ -48,8 +49,13 @@ def blog_view(request, **kwargs):
 
 
 class BlogForm(forms.ModelForm):
+    title = forms.CharField(label='标题', max_length=255)
+    body_raw = forms.CharField(label='正文', widget=forms.Textarea)
+    raw_format = forms.ChoiceField(label='格式', choices=Blog.RAW_FORMAT_CHOICES)
+
     class Meta:
         model = Blog
+        fields = ('title', 'body_raw', 'raw_format')
 
 
 def post_blog(request):
