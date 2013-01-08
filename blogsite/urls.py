@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from blog import views
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -6,7 +7,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     url(r'^login/', 'blog.views.admin_login'),
-    url(r'^admin/edit/', 'blog.views.post_blog'),
+    url(r'^admin/edit/', views.EditView.as_view()),
     url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/(?P<slug>.+)/', 'blog.views.blog_view', name='blog_view'),
     # Examples:
     # url(r'^$', 'blogsite.views.home', name='home'),

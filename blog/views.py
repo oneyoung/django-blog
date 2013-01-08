@@ -71,22 +71,35 @@ def post_blog(request):
 class EditView(FormView):
     '''
     kwargs for url
-    * new post:
-        new=True
-    * edit existig post:
-        year=YYYY
-        month=MM
-        slug=slug_of_post
+    * new post: /
+    * edit existig post: /?pk=primary_key
     '''
     form_class = BlogForm
     template_name = 'edit.html'
+    success_url = '/admin/'
+
+    @staticmethod
+    def _get_blog(pk):
+        try:
+            return Blog.objects.get(pk=pk)
+        except Blog.DoesNotExist:
+            raise http.Http404
 
     def get(self, request, *args, **kwargs):
-        qdict = request.QueryDict.dict()
-        if qdict.get('new', '') == 'True':
-            pass
+        pk = int(request.GET.get('pk', 0))
+        if pk == 0:
+            form = BlogForm()
         else:
-            pass
+            blog = self._get_blog(pk)
+            form = BlogForm(instance=blog)
+        return self.render_to_response({'form': form, 'pk': pk})
 
     def post(self, request, *args, **kwargs):
-        pass
+        pk = int(request.REQUEST.get('pk', 0))
+        blog = self._get_blog(pk) if pk else None
+        form = self.form_class(request.POST, instance=blog)
+        if form.is_valid():
+            form.save()
+        else:
+            return self.render_to_response({'form': form, 'pk': pk})
+        return http.HttpResponseRedirect(self.get_success_url())
