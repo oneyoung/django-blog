@@ -58,16 +58,6 @@ class BlogForm(forms.ModelForm):
         fields = ('title', 'body_raw', 'raw_format')
 
 
-def post_blog(request):
-    if request.method == 'POST':
-        form = BlogForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return http.HttpResponse("OK")
-    f = BlogForm()
-    return render(request, 'edit.html', {'form': f})
-
-
 class EditView(FormView):
     '''
     kwargs for url
