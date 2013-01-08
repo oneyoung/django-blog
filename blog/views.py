@@ -70,23 +70,21 @@ class EditView(FormView):
 
     @staticmethod
     def _get_blog(pk):
+        ''' when pk is 0, return None '''
         try:
-            return Blog.objects.get(pk=pk)
+            return Blog.objects.get(pk=pk) if pk else None
         except Blog.DoesNotExist:
             raise http.Http404
 
     def get(self, request, *args, **kwargs):
         pk = int(request.GET.get('pk', 0))
-        if pk == 0:
-            form = BlogForm()
-        else:
-            blog = self._get_blog(pk)
-            form = BlogForm(instance=blog)
+        blog = self._get_blog(pk)
+        form = self.form_class(instance=blog)
         return self.render_to_response({'form': form, 'pk': pk})
 
     def post(self, request, *args, **kwargs):
         pk = int(request.REQUEST.get('pk', 0))
-        blog = self._get_blog(pk) if pk else None
+        blog = self._get_blog(pk)
         form = self.form_class(request.POST, instance=blog)
         if form.is_valid():
             form.save()
