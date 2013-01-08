@@ -53,4 +53,4 @@ def post_blog(request):
             form.save()
             return http.HttpResponse("OK")
     f = BlogForm()
-    return render(request, 'post.html', {'form': f})
+    return render(request, 'edit.html', {'form': f})
