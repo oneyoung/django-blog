@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 
 class Comment(models.Model):
@@ -6,7 +7,7 @@ class Comment(models.Model):
 
 
 class Blog(models.Model):
-    slug = models.SlugField(max_length=255, editable=False, unique_for_month='date_create')
+    slug = models.SlugField(max_length=255, editable=False, unique=True)
     title = models.CharField(max_length=255)
     date_create = models.DateTimeField(auto_now_add=True)
     date_modify = models.DateTimeField(auto_now=True)
@@ -23,9 +24,14 @@ class Blog(models.Model):
         return self.title
 
     def save(self, **kwargs):
-        if not self.slug:  # new object here
-            self.slug = self.title
+        if not self.id:  # new object here
+            slug = self.title
+            if Blog.objects.filter(slug=slug):  # found slug conflict
+                slug = slug + datetime.now().strftime("_%y%m%d-%H%M%S")
+            self.slug = slug
         if self.raw_format == 'md':
+            self.body_html = self.body_raw
+        else:
             self.body_html = self.body_raw
         self.full_clean()
         models.Model.save(self, **kwargs)
