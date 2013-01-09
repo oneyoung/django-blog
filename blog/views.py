@@ -5,7 +5,7 @@ from django import http
 from django.contrib.auth import authenticate, login
 from models import Blog
 from forms import AdminUserForm, BlogForm
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView
 
 
 def admin_login(request):
@@ -25,22 +25,11 @@ def admin_login(request):
     return render(request, 'login.html', {'form': f, 'msg': msg})
 
 
-def get_blog_object(kwargs):
-    year = int(kwargs.get('year', 0))
-    month = int(kwargs.get('month', 0))
-    slug = kwargs.get('slug', '')
-
-    blog = Blog.objects.get(slug=slug, date_create__year=year,
-                            date_create__month=month)
-    return blog
-
-
-def blog_view(request, **kwargs):
-    try:
-        blog = get_blog_object(kwargs)
-        return http.HttpResponse("%s" % blog.body_html)
-    except:
-        raise http.Http404
+class BlogView(DetailView):
+    model = Blog
+    template_name = 'blog.html'
+    context_object_name = 'blog'
+    slug_url_kwarg = 'slug'
 
 
 class EditView(FormView):
