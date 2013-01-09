@@ -6,9 +6,10 @@ from blog import views
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^login/', views.AdminLoginView.as_view()),
-    url(r'^admin/edit/', views.EditView.as_view()),
-    url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/(?P<slug>.+)/',
+    url(r'^login/$', views.AdminLoginView.as_view()),
+    url(r'^admin/$', views.AdminView.as_view()),
+    url(r'^admin/edit/$', views.EditView.as_view()),
+    url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/(?P<slug>.+)/$',
         views.BlogView.as_view(), name='blog_view'),
     # Examples:
     # url(r'^$', 'blogsite.views.home', name='home'),

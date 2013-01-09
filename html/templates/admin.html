@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html lang="utf-8">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title> Admin </title>
+</head>
+<body>
+
+<ul>
+  <p> </p>
+  {% for object in object_list %}
+    <li>
+    <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
+    <a href="/admin/edit/?pk={{ object.pk }}"><button type="button">Edit</button></a>
+    </li>
+  {% endfor %}
+</ul>
+</body>
+</html>

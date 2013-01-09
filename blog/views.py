@@ -4,7 +4,7 @@ from django import http
 from django.contrib.auth import authenticate, login
 from models import Blog
 from forms import AdminUserForm, BlogForm
-from django.views.generic import FormView, DetailView
+from django.views.generic import FormView, DetailView, ListView
 
 
 class AdminLoginView(FormView):
@@ -28,6 +28,12 @@ class AdminLoginView(FormView):
                     return http.HttpResponseRedirect(self.get_success_url())
         msg = "Invalid username or password, please try again."
         return self.render_to_response({'form': form, 'msg': msg})
+
+
+class AdminView(ListView):
+    model = Blog
+    template_name = 'admin.html'
+    paginate_by = 10
 
 
 class BlogView(DetailView):
