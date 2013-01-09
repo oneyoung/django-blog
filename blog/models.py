@@ -26,7 +26,7 @@ class Blog(models.Model):
     def save(self, **kwargs):
         if not self.slug:  # new object here
             self.slug = self.title
-        if self.raw_format == 'html' and self.body_raw:
+        if self.raw_format == 'md':
             self.body_html = self.body_raw
         self.full_clean()
         models.Model.save(self, **kwargs)
