@@ -1,6 +1,5 @@
 # -*- coding: utf8 -*-
 # Create your views here.
-from django.shortcuts import render
 from django import http
 from django.contrib.auth import authenticate, login
 from models import Blog
@@ -8,9 +7,16 @@ from forms import AdminUserForm, BlogForm
 from django.views.generic import FormView, DetailView
 
 
-def admin_login(request):
-    msg = ""
-    if request.method == 'POST':
+class AdminLoginView(FormView):
+    form_class = AdminUserForm
+    template_name = 'login.html'
+    success_url = '/admin/'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return self.render_to_response({'form': form})
+
+    def post(self, request, *args, **kwargs):
         form = AdminUserForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -19,10 +25,9 @@ def admin_login(request):
             if user is not None:
                 if user.is_superuser and user.is_active:
                     login(request, user)
-                    return http.HttpResponseRedirect('/admin/')
+                    return http.HttpResponseRedirect(self.get_success_url())
         msg = "Invalid username or password, please try again."
-    f = AdminUserForm()
-    return render(request, 'login.html', {'form': f, 'msg': msg})
+        return self.render_to_response({'form': form, 'msg': msg})
 
 
 class BlogView(DetailView):
