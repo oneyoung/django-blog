@@ -1,9 +1,5 @@
-<!DOCTYPE HTML>
-<html lang="utf-8">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title> {{ blog.title }} </title>
-</head>
+{% include "head.html" with title=blog.title only %}
+
 <body>
 <content>
   {% autoescape off %}
