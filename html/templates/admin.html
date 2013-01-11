@@ -1,6 +1,5 @@
 {% include "head.html" with title="Admin" only %}
 
-<body>
 <ul>
   <div> <a href="{% url edit_view %}"><button type="button">New Post</button></a> </div>
   {% for object in object_list %}
@@ -20,5 +19,5 @@
     {% endif %}
   </div>
 </ul>
-</body>
-</html>
+
+{% include "foot.html" %}

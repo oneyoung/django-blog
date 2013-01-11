@@ -1,9 +1,8 @@
 {% include "head.html" with title="Post Blog" only %}
 
-<body>
 <form action="/admin/edit/?pk={{ pk }}" method="post">
   {{ form }}
   <input type="submit" value="Post" />
 </form>
-</body>
-</html>
+
+{% include "foot.html" %}

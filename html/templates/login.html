@@ -1,10 +1,9 @@
 {% include "head.html" with title="Login" only %}
 
-<body>
 <form action="/login/" method="post">
   {{ form }}
   <input type="submit" value="Login" />
 </form>
 <p><b style="color:red">{{ msg }}</b></p>
-</body>
-</html>
+
+{% include "foot.html" %}

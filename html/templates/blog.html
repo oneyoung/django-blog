@@ -1,6 +1,5 @@
 {% include "head.html" with title=blog.title only %}
 
-<body>
 <content>
   {% autoescape off %}
     {{ blog.body_html }}
@@ -9,4 +8,5 @@
 <comment>
 
 </comment>
-</body>
+
+{% include "foot.html" %}
