@@ -32,6 +32,7 @@ class AdminLoginView(FormView):
 
 class AdminView(ListView):
     model = Blog
+    queryset = Blog.objects.all().order_by("-date_create")
     template_name = 'admin.html'
     paginate_by = 10
 

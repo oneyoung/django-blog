@@ -7,13 +7,23 @@
 <body>
 
 <ul>
-  <p> </p>
+  <div> <a href="{% url edit_view %}"><button type="button">New Post</button></a> </div>
   {% for object in object_list %}
     <li>
     <a href="{{ object.get_absolute_url }}">{{ object.title }}</a>
-    <a href="/admin/edit/?pk={{ object.pk }}"><button type="button">Edit</button></a>
+    <a href="{% url edit_view %}?pk={{ object.pk }}"><button type="button">Edit</button></a>
     </li>
   {% endfor %}
+  <div>
+    {% if is_paginated %}
+      {% if page_obj.has_previous %}
+        <a href="{% url admin_view %}?page={{ page_obj.number|add:"-1" }}"><button type="button">Previous</button></a> </a>
+      {% endif %}
+      {% if page_obj.has_next %}
+        <a href="{% url admin_view %}?page={{ page_obj.number|add:"1" }}"><button type="button">Next</button></a> </a>
+      {% endif %}
+    {% endif %}
+  </div>
 </ul>
 </body>
 </html>
