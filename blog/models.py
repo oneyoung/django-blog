@@ -29,10 +29,14 @@ class Blog(models.Model):
             if Blog.objects.filter(slug=slug):  # found slug conflict
                 slug = slug + datetime.now().strftime("_%y%m%d-%H%M%S")
             self.slug = slug
+
         if self.raw_format == 'md':
+            import markdown
+            md = markdown.Markdown(extensions=['fenced_code'])
+            self.body_html = md.convert(self.body_raw)
+        elif self.raw_format == 'html':
             self.body_html = self.body_raw
-        else:
-            self.body_html = self.body_raw
+
         self.full_clean()
         models.Model.save(self, **kwargs)
 

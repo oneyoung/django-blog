@@ -1,13 +1,19 @@
 #!/usr/bin/python2
 import os
 
-try:
-    import django_evolution
-except:
-    print ("django_evoluton not found")
-    print ("run: `easy_install -U django_evolution` to install")
-    exit(1)
 
+def check_moudle(name, package=None):
+    if not package:
+        package = name
+    try:
+        __import__(name)
+    except ImportError:
+        print ("%s not found" % name)
+        print ("run: `easy_install -U %s` to install" % package)
+        exit(1)
+
+check_moudle('django_evolution')
+check_moudle('markdown')
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 

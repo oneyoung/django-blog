@@ -6,7 +6,9 @@
 </head>
 <body>
 <content>
-  {{ blog.body_html }}
+  {% autoescape off %}
+    {{ blog.body_html }}
+  {% endautoescape %}
 </content>
 <comment>
 
