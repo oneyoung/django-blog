@@ -1,9 +1,11 @@
 {% include "head.html" with title="Login" only %}
-
+<h1>Admin Login</h1>
+{% load bootstrap_toolkit %}
 <form action="/login/" method="post">
-  {{ form }}
-  <input type="submit" value="Login" />
+  {{ form|as_bootstrap }}
+  <input type="submit" value="Login" class="btn btn-success"/>
 </form>
-<p><b style="color:red">{{ msg }}</b></p>
-
+{% if msg %}
+<div class="alert alert-error"><strong>Error:</strong> {{ msg }}</div>
+{% endif %}
 {% include "foot.html" %}
