@@ -1,10 +1,18 @@
 {% include "head.html" with title="Admin" only %}
+<div class="container-fluid"><div class="row-fluid">
+<div class="span2">
+  <ul class="nav nav-pills nav-stacked">
+    <li class="active"><a href="#">Posts</a></li>
+    <li><a href="#">Comments</a></li>
+  <ul>
+</div>
+<div class="span10">
   <div><a href="{% url edit_view %}"><button class="btn btn-success">New Post</button></a></div>
   <table class="table">
   {% for object in object_list %}
     <tr>
       <td><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
-      <td><a href="{% url edit_view %}?pk={{ object.pk }}"><button class="btn btn-primary">Edit</button></a><td>
+      <td><a href="{% url edit_view %}?pk={{ object.pk }}"><button class="btn btn-primary"><i class="icon-pencil icon-white"></i>  Edit</button></a><td>
     </tr>
   {% endfor %}
   </table>
@@ -22,4 +30,6 @@
     </ul>
   {% endif %}
   </div>
+</div>
+</div></div>
 {% include "foot.html" %}
