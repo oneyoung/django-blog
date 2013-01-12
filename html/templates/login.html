@@ -2,6 +2,7 @@
 <h1>Admin Login</h1>
 {% load bootstrap_toolkit %}
 <form action="/login/" method="post">
+  {% csrf_token %}
   {{ form|as_bootstrap }}
   <input type="submit" value="Login" class="btn btn-success"/>
 </form>

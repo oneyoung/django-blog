@@ -1,7 +1,8 @@
 {% include "head.html" with title="Post Blog" only %}
-
+{% load bootstrap_toolkit %}
 <form action="/admin/edit/?pk={{ pk }}" method="post">
-  {{ form }}
+  {% csrf_token %}
+  {{ form|as_bootstrap }}
   <input type="submit" value="Post" />
 </form>
 
