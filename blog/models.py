@@ -25,7 +25,7 @@ class Blog(models.Model):
 
     def save(self, **kwargs):
         if not self.id:  # new object here
-            slug = self.title
+            slug = self.title.replace(' ', '-')
             if Blog.objects.filter(slug=slug):  # found slug conflict
                 slug = slug + datetime.now().strftime("_%y%m%d-%H%M%S")
             self.slug = slug
