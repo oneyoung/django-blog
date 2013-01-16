@@ -2,10 +2,6 @@ from django.db import models
 from datetime import datetime
 
 
-class Comment(models.Model):
-    pass
-
-
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
@@ -24,7 +20,6 @@ class Blog(models.Model):
     raw_format = models.CharField(max_length=10, choices=RAW_FORMAT_CHOICES, default='html')
     active = models.BooleanField(default=True)
     tags = models.ManyToManyField(Tag, blank=True, null=True)
-    #comment = models.OneToOneField(Comment)
 
     def __unicode__(self):
         return self.title
