@@ -2,9 +2,11 @@
 # Create your views here.
 from django import http
 from django.contrib.auth import authenticate, login
+from django.core.urlresolvers import reverse
+from django.core import exceptions
+from django.views.generic import FormView, DetailView, ListView
 from models import Blog
 from forms import AdminUserForm, BlogForm
-from django.views.generic import FormView, DetailView, ListView
 
 
 class AdminLoginView(FormView):
@@ -30,18 +32,27 @@ class AdminLoginView(FormView):
         return self.render_to_response({'form': form, 'msg': msg})
 
 
+def check_admin(request):
+    user = request.user
+    if user and user.is_authenticated() and user.is_superuser:
+        return True
+    else:
+        raise exceptions.PermissionDenied
+
+
 class AdminView(ListView):
     model = Blog
     queryset = Blog.objects.all().order_by("-date_create")
     template_name = 'admin.html'
     paginate_by = 10
 
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            check_admin(request)
+        except exceptions.PermissionDenied:
+            return http.HttpResponseRedirect(reverse("admin_login"))
 
-class BlogView(DetailView):
-    model = Blog
-    template_name = 'blog.html'
-    context_object_name = 'blog'
-    slug_url_kwarg = 'slug'
+        return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
 
 class EditView(FormView):
@@ -53,6 +64,10 @@ class EditView(FormView):
     form_class = BlogForm
     template_name = 'edit.html'
     success_url = '/admin/'
+
+    def dispatch(self, request, *args, **kwargs):
+        check_admin(request)  # if not admin, will show 403 page
+        return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
     @staticmethod
     def _get_blog(pk):
@@ -77,3 +92,10 @@ class EditView(FormView):
         else:
             return self.render_to_response({'form': form, 'pk': pk})
         return http.HttpResponseRedirect(self.get_success_url())
+
+
+class BlogView(DetailView):
+    model = Blog
+    template_name = 'blog.html'
+    context_object_name = 'blog'
+    slug_url_kwarg = 'slug'
