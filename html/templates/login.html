@@ -4,7 +4,7 @@
 <form action="/login/" method="post">
   {% csrf_token %}
   {{ form|as_bootstrap }}
-  <input type="submit" value="Login" class="btn btn-success"/>
+  <input type="submit" value="Login" class="btn btn-success" />
 </form>
 {% if msg %}
 <div class="alert alert-error"><strong>Error:</strong> {{ msg }}</div>

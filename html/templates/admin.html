@@ -4,6 +4,12 @@
   <ul class="nav nav-pills nav-stacked">
     <li class="active"><a href="#">Posts</a></li>
     <li><a href="#">Comments</a></li>
+    <li>
+      <form action="{% url logout_view %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Logout" class="btn btn-warning" />
+      </form>
+    </li>
   <ul>
 </div>
 <div class="span10">

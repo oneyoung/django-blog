@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 # Create your views here.
 from django import http
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.core import exceptions
 from django.views.generic import FormView, DetailView, ListView
@@ -32,10 +32,15 @@ class AdminLoginView(FormView):
         return self.render_to_response({'form': form, 'msg': msg})
 
 
+def logout_view(request):
+    logout(request)
+    return http.HttpResponseRedirect('/')
+
+
 def check_admin(request):
     user = request.user
     if user and user.is_authenticated() and user.is_superuser:
-        return True
+        pass
     else:
         raise exceptions.PermissionDenied
 
