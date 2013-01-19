@@ -5,6 +5,9 @@ from datetime import datetime
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Blog(models.Model):
     slug = models.SlugField(max_length=255, editable=False, unique=True)
