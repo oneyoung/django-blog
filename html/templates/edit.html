@@ -5,13 +5,23 @@
   {{ form|as_bootstrap }}
   <input type="submit" value="Post" />
 </form>
-<div id="taglist">
-</div>
-<div id="all_taglist">
-  {% for tag in tags %}
-    <span data-type="tag" class="label" id="id_tag_{{ tag.name }}">{{ tag.name }}</span>
-  {% endfor %}
-</div>
+<table class="table table-bordered">
+  <tr><td>
+    <form>
+      <input type="text" data-provide="typeahead" data-source='[{% for tag in tags %}"{{ tag }}",{% endfor %}""]' />
+      <button  type="submit" class="btn">Add</button>
+    </form>
+    <div id="taglist">
+    </div>
+  </td></tr>
+  <tr><td>
+    <div id="all_taglist">
+      {% for tag in tags %}
+        <span data-type="tag" class="label" id="id_tag_{{ tag.name }}">{{ tag.name }}</span>
+      {% endfor %}
+    </div>
+  </td></tr>
+</table>
 
 <script>
 var allTagList = document.getElementById("all_taglist");
