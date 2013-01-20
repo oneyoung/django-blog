@@ -18,9 +18,10 @@
 
     <div class="row">
       <div class="span9">
-        <h1>{{ blog.title }}</h1>
-        <p><i class="icon-calendar"></i> {{ blog.date_create|date:"o年n月j日" }} </p>
-        <hr />
+        <div class="page-header">
+          <h1>{{ blog.title }}</h1>
+          <p><i class="icon-calendar"></i> {{ blog.date_create|date:"o年n月j日" }} </p>
+        </div>
         <content>
           {% autoescape off %}
             {{ blog.body_html }}
