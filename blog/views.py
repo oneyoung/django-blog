@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.core import exceptions
 from django.views.generic import FormView, DetailView, ListView
-from models import Blog
+from models import Blog, Tag
 from forms import AdminUserForm, BlogForm
 
 
@@ -86,7 +86,7 @@ class EditView(FormView):
         pk = int(request.GET.get('pk', 0))
         blog = self._get_blog(pk)
         form = self.form_class(instance=blog)
-        return self.render_to_response({'form': form, 'pk': pk})
+        return self.render_to_response({'form': form, 'pk': pk, 'tags': Tag.objects.all()})
 
     def post(self, request, *args, **kwargs):
         pk = int(request.REQUEST.get('pk', 0))
