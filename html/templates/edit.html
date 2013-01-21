@@ -11,5 +11,62 @@
   {% endfor %}
   <input type="submit" value="Post" />
 </form>
+<table class="table table-bordered">
+  <tr><td>
+    <form>
+      <input type="text" data-provide="typeahead" data-source='[{% for tag in tags %}"{{ tag }}",{% endfor %}""]' />
+      <button  type="submit" class="btn">Add</button>
+    </form>
+    <div id="taglist">
+    </div>
+  </td></tr>
+  <tr><td>
+    <div id="all_taglist">
+      {% for tag in tags %}
+        <span data-type="tag" class="label" id="id_tag_{{ tag.name }}">{{ tag.name }}</span>
+      {% endfor %}
+    </div>
+  </td></tr>
+</table>
 
+<script>
+var allTagList = document.getElementById("all_taglist");
+var tagList = document.getElementById("taglist");
+
+function selectTag(tag, select) {
+  var oldState = tag.getAttribute("data-state");
+  if (select) {
+    tag.setAttribute("class", "label label-inverse");
+    tag.setAttribute("data-state", "selected");
+  } else {
+    tag.setAttribute("class", "label");
+    tag.setAttribute("data-state", "free");
+  }
+  return oldState != tag.getAttribute("data-state");
+}
+
+allTagList.onclick = function(event) {
+  var tag = event.target;
+  if (tag.getAttribute("data-type") == "tag") {
+    if (selectTag(tag, true)) {
+      var clonetag = tag.cloneNode(true);
+      clonetag.removeAttribute("id");
+      clonetag.setAttribute("class", "label label-success");
+      tagList.appendChild(clonetag);
+    }
+  }
+};
+
+tagList.onclick = function(event) {
+  var tag = event.target;
+  if (tag.getAttribute("data-type") == "tag") {
+    var tagname = tag.childNodes[0];
+    var tag_id = "id_tag_" + tagname.data;
+    var tag_orig = document.getElementById(tag_id);
+    selectTag(tag_orig, false);
+    tagList.removeChild(tag)
+  }
+};
+
+</script>
 {% include "foot.html" %}
