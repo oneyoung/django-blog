@@ -2,7 +2,13 @@
 {% load bootstrap_toolkit %}
 <form action="/admin/edit/?pk={{ pk }}" method="post">
   {% csrf_token %}
-  {{ form|as_bootstrap }}
+  <input name="title" type="text" maxlength="255"{% if not blog.title %} placeholder="Input your tilte here"{% else %}value="{{ blog.title }}"{% endif %} />
+  <textarea name="body_raw">{{ blog.body_raw }}</textarea>
+  {% for format in blog.RAW_FORMAT_CHOICES %}
+  <label class="radio">
+      <input type="radio" name="raw_format" value="{{ format.0 }}" {% if blog.raw_format == format.0 %}checked{% endif %}>{{ format.1 }}</input>
+  </label>
+  {% endfor %}
   <input type="submit" value="Post" />
 </form>
 

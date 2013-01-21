@@ -78,15 +78,14 @@ class EditView(FormView):
     def _get_blog(pk):
         ''' when pk is 0, return None '''
         try:
-            return Blog.objects.get(pk=pk) if pk else None
+            return Blog.objects.get(pk=pk) if pk else Blog()
         except Blog.DoesNotExist:
             raise http.Http404
 
     def get(self, request, *args, **kwargs):
         pk = int(request.GET.get('pk', 0))
         blog = self._get_blog(pk)
-        form = self.form_class(instance=blog)
-        return self.render_to_response({'form': form, 'pk': pk})
+        return self.render_to_response({'blog': blog, 'pk': pk})
 
     def post(self, request, *args, **kwargs):
         pk = int(request.REQUEST.get('pk', 0))
@@ -95,7 +94,7 @@ class EditView(FormView):
         if form.is_valid():
             form.save()
         else:
-            return self.render_to_response({'form': form, 'pk': pk})
+            return self.render_to_response({'blog': blog, 'pk': pk})
         return http.HttpResponseRedirect(self.get_success_url())
 
 
