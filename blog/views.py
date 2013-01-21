@@ -90,9 +90,9 @@ class EditView(FormView):
     def post(self, request, *args, **kwargs):
         pk = int(request.REQUEST.get('pk', 0))
         blog = self._get_blog(pk)
-        form = self.form_class(request.POST, instance=blog)
+        form = self.form_class(request.POST)
         if form.is_valid():
-            form.save()
+            form.saveto(blog)
         else:
             return self.render_to_response({'blog': blog, 'pk': pk, 'tags': Tag.objects.all()})
         return http.HttpResponseRedirect(self.get_success_url())

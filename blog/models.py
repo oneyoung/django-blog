@@ -44,6 +44,17 @@ class Blog(models.Model):
         self.full_clean()
         models.Model.save(self, **kwargs)
 
+    def update_tags(self, tag_list):
+        if not self.id:  # new here, need to save before update m2m fields
+            self.save()
+        tags_new = set(
+            map(lambda n: Tag.objects.get_or_create(name=n)[0], tag_list))
+        tags_old = set(self.tags.all())
+        for tag in tags_old - tags_new:
+            self.tags.remove(tag)
+        for tag in tags_new - tags_old:
+            self.tags.add(tag)
+
     @models.permalink
     def get_absolute_url(self):
         return ('blog_view', (), {
