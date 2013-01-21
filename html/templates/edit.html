@@ -1,33 +1,60 @@
 {% include "head.html" with title="Post Blog" only %}
+<style type="text/css">
+#id_title, table, textarea {
+  width: 100%;
+}
+
+#id_post {
+  float: right;
+}
+
+#id_table_tag td {
+  width: 50%;
+}
+</style>
 {% load bootstrap_toolkit %}
 <form action="/admin/edit/?pk={{ pk }}" method="post">
   {% csrf_token %}
-  <input name="title" type="text" maxlength="255"{% if not blog.title %} placeholder="Input your tilte here"{% else %}value="{{ blog.title }}"{% endif %} />
-  <textarea name="body_raw">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea>
-  {% for format in blog.RAW_FORMAT_CHOICES %}
-  <label class="radio">
-      <input type="radio" name="raw_format" value="{{ format.0 }}" {% if blog.raw_format == format.0 %}checked{% endif %}>{{ format.1 }}</input>
-  </label>
-  {% endfor %}
-  <input type="submit" value="Post" />
-</form>
-<table class="table table-bordered">
-  <tr><td>
-    <form>
-      <input type="text" data-provide="typeahead" data-source='[{% for tag in tags %}"{{ tag }}",{% endfor %}""]' />
-      <button  type="submit" class="btn">Add</button>
-    </form>
-    <div id="taglist">
-    </div>
-  </td></tr>
-  <tr><td>
-    <div id="all_taglist">
-      {% for tag in tags %}
-        <span data-type="tag" class="label" id="id_tag_{{ tag.name }}">{{ tag.name }}</span>
+  <table>
+    <tr><td>
+      <div><input name="title" type="text" id="id_title" maxlength="255"{% if not blog.title %} placeholder="Input your tilte here"{% else %}value="{{ blog.title }}"{% endif %} /></div>
+    </td><tr>
+    <tr><td>
+      <div><textarea name="body_raw" rows=30 placeholder="Content of your blog">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea></div>
+    </td><tr>
+    <tr><td>
+      {% for format in blog.RAW_FORMAT_CHOICES %}
+      <label class="radio">
+          <input type="radio" name="raw_format" value="{{ format.0 }}" {% if blog.raw_format == format.0 %}checked{% endif %}>{{ format.1 }}</input>
+      </label>
       {% endfor %}
-    </div>
-  </td></tr>
-</table>
+    </td><tr>
+    <tr><td>
+      <table id="id_table_tag" class="table table-bordered">
+        <tr>
+          <td>
+            <form>
+              <input type="text" data-provide="typeahead" data-source='[{% for tag in tags %}"{{ tag }}",{% endfor %}""]' />
+              <button type="submit" class="btn">Add</button>
+            </form>
+            <div id="taglist">
+            </div>
+          </td>
+          <td>
+            <div id="all_taglist">
+              {% for tag in tags %}
+                <span data-type="tag" class="label" id="id_tag_{{ tag.name }}">{{ tag.name }}</span>
+              {% endfor %}
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td><tr>
+    <tr><td>
+      <button type="submit" id="id_post" class="btn btn-success">Post</button>
+    </td><tr>
+  <table>
+</form>
 
 <script>
 var allTagList = document.getElementById("all_taglist");

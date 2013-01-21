@@ -76,7 +76,7 @@ class EditView(FormView):
 
     @staticmethod
     def _get_blog(pk):
-        ''' when pk is 0, return None '''
+        ''' when pk is 0, return empty Blog() '''
         try:
             return Blog.objects.get(pk=pk) if pk else Blog()
         except Blog.DoesNotExist:
@@ -94,7 +94,7 @@ class EditView(FormView):
         if form.is_valid():
             form.save()
         else:
-            return self.render_to_response({'blog': blog, 'pk': pk})
+            return self.render_to_response({'blog': blog, 'pk': pk, 'tags': Tag.objects.all()})
         return http.HttpResponseRedirect(self.get_success_url())
 
 
