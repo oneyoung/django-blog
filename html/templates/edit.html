@@ -3,7 +3,7 @@
 <form action="/admin/edit/?pk={{ pk }}" method="post">
   {% csrf_token %}
   <input name="title" type="text" maxlength="255"{% if not blog.title %} placeholder="Input your tilte here"{% else %}value="{{ blog.title }}"{% endif %} />
-  <textarea name="body_raw">{{ blog.body_raw }}</textarea>
+  <textarea name="body_raw">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea>
   {% for format in blog.RAW_FORMAT_CHOICES %}
   <label class="radio">
       <input type="radio" name="raw_format" value="{{ format.0 }}" {% if blog.raw_format == format.0 %}checked{% endif %}>{{ format.1 }}</input>
@@ -49,10 +49,10 @@ allTagList.onclick = function(event) {
   var tag = event.target;
   if (tag.getAttribute("data-type") == "tag") {
     if (selectTag(tag, true)) {
-      var clonetag = tag.cloneNode(true);
-      clonetag.removeAttribute("id");
-      clonetag.setAttribute("class", "label label-success");
-      tagList.appendChild(clonetag);
+      var cloneTag = tag.cloneNode(true);
+      cloneTag.removeAttribute("id");
+      cloneTag.setAttribute("class", "label label-success");
+      tagList.appendChild(cloneTag);
     }
   }
 };
@@ -60,10 +60,10 @@ allTagList.onclick = function(event) {
 tagList.onclick = function(event) {
   var tag = event.target;
   if (tag.getAttribute("data-type") == "tag") {
-    var tagname = tag.childNodes[0];
-    var tag_id = "id_tag_" + tagname.data;
-    var tag_orig = document.getElementById(tag_id);
-    selectTag(tag_orig, false);
+    var tagName = tag.childNodes[0];
+    var tagID = "id_tag_" + tagName.data;
+    var tagOrig = document.getElementById(tagID);
+    selectTag(tagOrig, false);
     tagList.removeChild(tag)
   }
 };
