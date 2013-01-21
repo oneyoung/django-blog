@@ -105,6 +105,11 @@ addBtn.onclick = function(event) {
 };
 
 function submitPost() {
+  var form = document.getElementById("id_form_post");
+  if (!form.elements["title"].value || !form.elements["body_raw"].value) {
+    alert("Title and Content must not be blank!");
+    return false
+  }
   var allTags = document.getElementById("id_taglist").getElementsByTagName("span");
   var tags = [];
   for (var i = 0; i < allTags.length; i++) {
@@ -113,7 +118,6 @@ function submitPost() {
       tags[tags.length] = tag.textContent;
     }
   }
-  var form = document.getElementById("id_form_post");
   form.elements["tags"].value = JSON.stringify(tags);
   form.submit();
   return true;
