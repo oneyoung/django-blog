@@ -30,44 +30,51 @@
       {% endfor %}
     </td><tr>
     <tr><td>
-      <table id="id_table_tag" class="table table-bordered">
-        <tr>
-          <td>
-            <form>
-              <input type="text" data-provide="typeahead" data-source='[{% for tag in tags %}"{{ tag }}",{% endfor %}""]' />
-              <button type="submit" class="btn">Add</button>
-            </form>
-            <div id="taglist">
-              <span data-type="tag" class="label"></span>
-            {% for tag in tags %}
-              <span data-type="tag" class="label {% if blog.id and tag in blog.tags.all %} label-success{% endif %}" id="id_tag_{{ tag.name }}">{{ tag.name }}</span>
-            {% endfor %}
-            </div>
-          </td>
-          <td>
-          </td>
-        </tr>
-      </table>
-    </td><tr>
-    <tr><td>
       <button type="submit" id="id_post" class="btn btn-success">Post</button>
     </td><tr>
-  <table>
+  </table>
 </form>
 
-<script>
-var tagList = document.getElementById("taglist");
+<div id="id_table_tag">
+      <input type="text" id="id_txt_tag" data-provide="typeahead" data-source='[{% for tag in tags %}"{{ tag }}",{% endfor %}""]' />
+      <button class="btn" id="id_btn_addtag">Add</button>
+      <div id="id_taglist">
+      {% for tag in tags %}
+        <span data-type="tag" class="label {% if blog.id and tag in blog.tags.all %} label-success{% endif %}" id="id_tag_{{ tag.name }}">{{ tag.name }}</span>
+      {% endfor %}
+      </div>
+</div>
 
-function toggleTag(tag) {
-  var selected = "label label-success";
-  var unselected = "label"
-  if (tag.getAttribute("class").search("success") < 0) {
-    tag.setAttribute("class", selected);
+
+<script>
+function createTag(name) {
+  var tag = document.createElement("span");
+  tag.setAttribute("data-type", "tag");
+  tag.setAttribute("class", "label");
+  tag.setAttribute("id", "id_tag_" + name);
+  tag.textContent = name;
+  return tag;
+}
+
+function selectTag(tag, select) {
+  var SELECTED = "label label-success";
+  var UNSELECTED = "label"
+  if (select) {
+    tag.setAttribute("class", SELECTED);
   } else {
-    tag.setAttribute("class", unselected);
+    tag.setAttribute("class", UNSELECTED);
   }
 }
 
+function toggleTag(tag) {
+  if (tag.getAttribute("class").search("success") < 0) {
+    selectTag(tag, true);
+  } else {
+    selectTag(tag, false);
+  }
+}
+
+var tagList = document.getElementById("id_taglist");
 tagList.onclick = function(event) {
   var tag = event.target;
   if (tag.getAttribute("data-type") == "tag") {
@@ -75,5 +82,21 @@ tagList.onclick = function(event) {
   }
 };
 
+var addBtn = document.getElementById("id_btn_addtag");
+addBtn.onclick = function(event) {
+  var tagInput = document.getElementById("id_txt_tag");
+  var name = tagInput.value
+  if (name) {
+    var tag = document.getElementById("id_tag_" + name);
+    if (tag) {
+      selectTag(tag, true);
+    } else {
+      var newTag = createTag(name);
+      selectTag(newTag, true);
+      document.getElementById("id_taglist").appendChild(newTag);
+    }
+    tagInput.value = ""
+  }
+};
 </script>
 {% include "foot.html" %}
