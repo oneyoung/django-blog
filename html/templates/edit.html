@@ -13,7 +13,7 @@
 }
 </style>
 {% load bootstrap_toolkit %}
-<form action="/admin/edit/?pk={{ pk }}" method="post">
+<form action="/admin/edit/?pk={{ pk }}" method="post" id="id_form_post" onsubmit="return submitPost()">
   {% csrf_token %}
   <table>
     <tr><td>
@@ -30,6 +30,7 @@
       {% endfor %}
     </td><tr>
     <tr><td>
+      <input name="tags" type="hidden" value="" />
       <button type="submit" id="id_post" class="btn btn-success">Post</button>
     </td><tr>
   </table>
@@ -66,11 +67,15 @@ function selectTag(tag, select) {
   }
 }
 
+function isTagSelected(tag) {
+  return !(tag.getAttribute("class").search("success") < 0);
+}
+
 function toggleTag(tag) {
-  if (tag.getAttribute("class").search("success") < 0) {
-    selectTag(tag, true);
-  } else {
+  if (isTagSelected(tag)) {
     selectTag(tag, false);
+  } else {
+    selectTag(tag, true);
   }
 }
 
@@ -98,5 +103,21 @@ addBtn.onclick = function(event) {
     tagInput.value = ""
   }
 };
+
+function submitPost() {
+  var allTags = document.getElementById("id_taglist").getElementsByTagName("span");
+  var tags = [];
+  for (var i = 0; i < allTags.length; i++) {
+    var tag = allTags[i];
+    if (isTagSelected(tag)) {
+      tags[tags.length] = tag.textContent;
+    }
+  }
+  var form = document.getElementById("id_form_post");
+  form.elements["tags"].value = JSON.stringify(tags);
+  form.submit();
+  return true;
+}
+
 </script>
 {% include "foot.html" %}
