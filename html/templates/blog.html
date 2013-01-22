@@ -29,7 +29,7 @@
         </content>
         <div>
           <hr />
-          <p><i class="icon-tags"></i> {% for tag in blog.tags.all %}<span class="label label-info">{{ tag }}</span> {% endfor %}<p>
+          <p><i class="icon-tags"></i> {% for tag in blog.tags.all %}<a href="{% url tag tag=tag.name %}"><span class="label label-info">{{ tag }}</span></a> {% endfor %}<p>
         </div>
         <comment>
 
