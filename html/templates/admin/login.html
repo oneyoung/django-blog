@@ -1,4 +1,8 @@
-{% include "admin/head.html" with title="Login" only %}
+{% extends "admin/base.html" %}
+
+{% block title %} Admin Login {% endblock %}
+
+{% block content %}
 <h1>Admin Login</h1>
 {% load bootstrap_toolkit %}
 <form action="/login/" method="post">
@@ -9,4 +13,4 @@
 {% if msg %}
 <div class="alert alert-error"><strong>Error:</strong> {{ msg }}</div>
 {% endif %}
-{% include "foot.html" %}
+{% endblock %}

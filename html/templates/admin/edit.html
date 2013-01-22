@@ -1,4 +1,8 @@
-{% include "admin/head.html" with title="Post Blog" only %}
+{% extends "admin/base.html" %}
+
+{% block title %} Post Blog {% endblock %}
+
+{% block content %}
 <style type="text/css">
 #id_title, table, textarea {
   width: 100%;
@@ -124,4 +128,4 @@ function submitPost() {
 }
 
 </script>
-{% include "foot.html" %}
+{% endblock %}

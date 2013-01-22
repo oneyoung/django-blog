@@ -1,4 +1,8 @@
-{% include "admin/head.html" with title="Admin" only %}
+{% extends "admin/base.html" %}
+
+{% block title %} Admin {% endblock %}
+
+{% block content %}
 <div class="container-fluid"><div class="row-fluid">
 <div class="span2">
   <ul class="nav nav-pills nav-stacked">
@@ -38,4 +42,4 @@
   </div>
 </div>
 </div></div>
-{% include "foot.html" %}
+{% endblock %}
