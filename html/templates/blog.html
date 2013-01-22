@@ -27,7 +27,10 @@
             {{ blog.body_html }}
           {% endautoescape %}
         </content>
-        <hr />
+        <div>
+          <hr />
+          <p><i class="icon-tags"></i> {% for tag in blog.tags.all %}<span class="label label-info">{{ tag }}</span> {% endfor %}<p>
+        </div>
         <comment>
 
         </comment>
