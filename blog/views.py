@@ -2,7 +2,7 @@
 # Create your views here.
 from django import http
 from django.contrib.auth import authenticate, login, logout
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve
 from django.core import exceptions
 from django.views.generic import FormView, DetailView, ListView
 from models import Blog, Tag
@@ -103,3 +103,28 @@ class BlogView(DetailView):
     template_name = 'blog.html'
     context_object_name = 'blog'
     slug_url_kwarg = 'slug'
+
+
+class BlogListView(ListView):
+    template_name = 'index.html'
+
+    def get_queryset(self):
+        try:
+            view_name = resolve(self.request.path).url_name
+            if view_name == 'home':
+                queryset = Blog.objects.all()
+            elif view_name == 'tag':
+                name = self.kwargs.get('tag')
+                tag = Tag.objects.get(name=name)
+                queryset = tag.blog_set.all()
+            elif view_name == 'date':
+                year = int(self.kwargs.get('year', 0))
+                month = int(self.kwargs.get('month', 0))
+                queryset = Blog.objects.filter(date_create__year=year,
+                                               date_create__month=month)
+            else:
+                raise LookupError
+        except:
+            raise http.Http404
+
+        return queryset.order_by("-date_create")

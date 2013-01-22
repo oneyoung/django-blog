@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from blog import views
 
 # Uncomment the next two lines to enable the admin:
@@ -6,10 +6,15 @@ from blog import views
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', views.BlogListView.as_view(), name='home'),
     url(r'^login/$', views.AdminLoginView.as_view(), name='admin_login'),
     url(r'^logout/$', views.logout_view, name='logout_view'),
     url(r'^admin/$', views.AdminView.as_view(), name='admin_view'),
     url(r'^admin/edit/$', views.EditView.as_view(), name='edit_view'),
+    url(r'^archive/tag/(?P<tag>.+)/$',
+        views.BlogListView.as_view(), name='tag'),
+    url(r'^archive/date/(?P<year>\d{4})(?P<month>\d{2})/$',
+        views.BlogListView.as_view(), name='date'),
     url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/(?P<slug>.+)/$',
         views.BlogView.as_view(), name='blog_view'),
     # Examples:
