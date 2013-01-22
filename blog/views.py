@@ -11,7 +11,7 @@ from forms import AdminUserForm, BlogForm
 
 class AdminLoginView(FormView):
     form_class = AdminUserForm
-    template_name = 'login.html'
+    template_name = 'admin/login.html'
     success_url = '/admin/'
 
     def get(self, request, *args, **kwargs):
@@ -48,7 +48,7 @@ def check_admin(request):
 class AdminView(ListView):
     model = Blog
     queryset = Blog.objects.all().order_by("-date_create")
-    template_name = 'admin.html'
+    template_name = 'admin/admin.html'
     paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
@@ -67,7 +67,7 @@ class EditView(FormView):
     * edit existig post: /?pk=primary_key
     '''
     form_class = BlogForm
-    template_name = 'edit.html'
+    template_name = 'admin/edit.html'
     success_url = '/admin/'
 
     def dispatch(self, request, *args, **kwargs):
