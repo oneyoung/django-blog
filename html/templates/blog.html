@@ -1,44 +1,18 @@
 {% include "head.html" with title=blog.title only %}
-
-<div class="row">
-  <div class="span12">
-    <div class="hero-unit">
-      <h1>Oneyoung</h1>
-      <p>This is oneyoung's blog.</p>
-    </div>
-    <div class="navbar">
-      <div class="navbar-inner">
-        <ul class="nav">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Link</a></li>
-          <li><a href="#">Link</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="span9">
-        <div class="page-header">
-          <h1>{{ blog.title }}</h1>
-          <p><i class="icon-calendar"></i> {{ blog.date_create|date:"o年n月j日" }} </p>
-        </div>
-        <content>
-          {% autoescape off %}
-            {{ blog.body_html }}
-          {% endautoescape %}
-        </content>
-        <div>
-          <hr />
-          <p><i class="icon-tags"></i> {% for tag in blog.tags.all %}<a href="{% url tag tag=tag.name %}"><span class="label label-info">{{ tag }}</span></a> {% endfor %}<p>
-        </div>
-        <comment>
-
-        </comment>
-      </div>
-      <div class="span3">
-      <h1>some informantion here</h1>
-      <div>
-    </div>
-  </div>
+<div class="page-header">
+  <h1>{{ blog.title }}</h1>
+  <p><i class="icon-calendar"></i> {{ blog.date_create|date:"o年n月j日" }} </p>
 </div>
+<content>
+  {% autoescape off %}
+    {{ blog.body_html }}
+  {% endautoescape %}
+</content>
+<div>
+  <hr />
+  <p><i class="icon-tags"></i> {% for tag in blog.tags.all %}<a href="{% url tag tag=tag.name %}"><span class="label label-info">{{ tag }}</span></a> {% endfor %}<p>
+</div>
+<comment>
+
+</comment>
 {% include "foot.html" %}
