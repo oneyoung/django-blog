@@ -57,7 +57,7 @@ class Blog(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('blog_view', (), {
+        return ('blog', (), {
             'year': self.date_create.strftime('%Y'),
             'month': self.date_create.strftime('%m'),
             'slug': self.slug})

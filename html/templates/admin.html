@@ -5,7 +5,7 @@
     <li class="active"><a href="#">Posts</a></li>
     <li><a href="#">Comments</a></li>
     <li>
-      <form action="{% url logout_view %}" method="post">
+      <form action="{% url logout %}" method="post">
         {% csrf_token %}
         <input type="submit" value="Logout" class="btn btn-warning" />
       </form>
@@ -13,12 +13,12 @@
   <ul>
 </div>
 <div class="span10">
-  <div><a href="{% url edit_view %}"><button class="btn btn-success">New Post</button></a></div>
+  <div><a href="{% url edit %}"><button class="btn btn-success">New Post</button></a></div>
   <table class="table">
   {% for object in object_list %}
     <tr>
       <td><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
-      <td><a href="{% url edit_view %}?pk={{ object.pk }}"><button class="btn btn-primary"><i class="icon-pencil icon-white"></i>  Edit</button></a><td>
+      <td><a href="{% url edit %}?pk={{ object.pk }}"><button class="btn btn-primary"><i class="icon-pencil icon-white"></i>  Edit</button></a><td>
     </tr>
   {% endfor %}
   </table>
@@ -28,7 +28,7 @@
     <ul>
     {% for index in paginator.page_range %}
       {% if index != page_obj.number %}
-      <li ><a href="{% url admin_view %}?page={{index}}">{{ index }}</a></li>
+      <li ><a href="{% url admin %}?page={{index}}">{{ index }}</a></li>
       {% else %}
       <li class="disabled"><a href="#">{{ index }}</a></li>
       {% endif %}
