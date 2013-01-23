@@ -107,24 +107,36 @@ class BlogView(DetailView):
 
 class BlogListView(ListView):
     template_name = 'index.html'
+    context_object_name = 'blogs'
 
     def get_queryset(self):
-        try:
-            view_name = resolve(self.request.path).url_name
-            if view_name == 'home':
-                queryset = Blog.objects.all()
-            elif view_name == 'tag':
-                name = self.kwargs.get('tag')
-                tag = Tag.objects.get(name=name)
-                queryset = tag.blog_set.all()
-            elif view_name == 'date':
-                year = int(self.kwargs.get('year', 0))
-                month = int(self.kwargs.get('month', 0))
-                queryset = Blog.objects.filter(date_create__year=year,
-                                               date_create__month=month)
-            else:
-                raise LookupError
-        except:
-            raise http.Http404
+        if not self.queryset:
+            try:
+                path = self.request.path
+                view_name = resolve(path).url_name
+                context = dict(self.kwargs)
+                context['path'] = path
+                context['view_name'] = view_name
+                self._context = context
+                if view_name == 'home':
+                    queryset = Blog.objects.all()
+                elif view_name == 'tag':
+                    name = self.kwargs.get('tag')
+                    tag = Tag.objects.get(name=name)
+                    queryset = tag.blog_set.all()
+                elif view_name == 'date':
+                    year = int(self.kwargs.get('year', 0))
+                    month = int(self.kwargs.get('month', 0))
+                    queryset = Blog.objects.filter(date_create__year=year,
+                                                   date_create__month=month)
+                else:
+                    raise LookupError
+            except:
+                raise http.Http404
+            self.queryset = queryset.order_by("-date_create")
+        return self.queryset
 
-        return queryset.order_by("-date_create")
+    def get_context_data(self, **kwargs):
+        context = kwargs
+        context.update(self._context)
+        return super(self.__class__, self).get_context_data(**context)
