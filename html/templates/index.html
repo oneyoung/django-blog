@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{% spaceless %}
+  {% if view_name == "home" %}
+    Home
+  {% elif view_name == "tag" %}
+    Archive | Tag: {{ tag }}
+  {% elif view_name == "date" %}
+    Archive | Date: {{ year }}/{{ month }}
+  {% endif %}
+{% endspaceless %}{% endblock %}
+
+{% block content %}
+<style type="text/css">
+#id_list .blog-date { float:right }
+</style>
+
+<div id="id_list">
+{% for blog in blogs %}
+  <div class="page-header">
+    <h3><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></h3>
+    <blockquote>{{ blog.body_html|striptags|truncatewords:30}}</blockquote>
+    <div>
+      <span class="blog-tags"><i class="icon-tags"></i> {% for tag in blog.tags.all %}<a href="{% url tag tag=tag.name %}"><span class="label label-info">{{ tag }}</span></a> {% endfor %}</span>
+      <span class="blog-date"><small><i class="icon-calendar"></i> {{ blog.date_create|date:"o年n月j日" }}</small></span>
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+<div id="id_pager">
+{% if is_paginated %}
+  <ul class="pager">
+  {% if page_obj.has_previous %}
+    <li class="previous">
+      <a href="{{ path }}?page={{ page_obj.number|add:"-1" }}"> 上一页</a>
+    </li>
+  {% endif %}
+  {% if page_obj.has_next %}
+    <li class="next">
+      <a href="{{ path }}?page={{ page_obj.number|add:"1" }}">下一页 </a>
+    </li>
+  {% endif %}
+  </ul>
+{% endif %}
+</div>
+{% endblock %}

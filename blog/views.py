@@ -108,6 +108,7 @@ class BlogView(DetailView):
 class BlogListView(ListView):
     template_name = 'index.html'
     context_object_name = 'blogs'
+    paginate_by = 6
 
     def get_queryset(self):
         if not self.queryset:
