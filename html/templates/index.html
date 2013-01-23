@@ -18,8 +18,8 @@
 <div id="id_list">
 {% for blog in blogs %}
   <div class="page-header">
-    <h3><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></h3>
-    <blockquote>{{ blog.body_html|striptags|truncatewords:30}}</blockquote>
+    <h1><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></h1>
+    <blockquote>{% autoescape off %}{{ blog.body_html|truncatewords_html:30}}{% endautoescape %}</blockquote>
     <div>
       <span class="blog-tags"><i class="icon-tags"></i> {% for tag in blog.tags.all %}<a href="{% url tag tag=tag.name %}"><span class="label label-info">{{ tag }}</span></a> {% endfor %}</span>
       <span class="blog-date"><small><i class="icon-calendar"></i> {{ blog.date_create|date:"o年n月j日" }}</small></span>
