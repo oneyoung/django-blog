@@ -8,8 +8,12 @@
   width: 100%;
 }
 
-#id_post {
+#id_submit {
   float: right;
+}
+
+#id_submit_choices button {
+  width: 100%;
 }
 
 #id_table_tag td {
@@ -35,7 +39,17 @@
     </td><tr>
     <tr><td>
       <input name="tags" type="hidden" value="" />
-      <button type="submit" id="id_post" class="btn btn-success">Post</button>
+      <div class="btn-group" id="id_submit">
+        <button class="btn dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" id="id_submit_choices">
+          <li><button type="submit" name="status" value="public" class="btn btn-success">Post to Public</button></li>
+          <li><button type="submit" name="status" value="draft" class="btn">Save as Draft</button></li>
+          <li><button type="submit" name="status" value="private" class="btn btn-info">Private Only </button></li>
+          <li><button type="submit" name="status" value="delete" class="btn btn-danger">Delete!</button></li>
+        </ul>
+      </div>
     </td><tr>
   </table>
 </form>
@@ -127,5 +141,19 @@ function submitPost() {
   return true;
 }
 
+window.onload = function () {
+  /* Submit Button */
+  var buttonList = document.getElementById("id_submit_choices");
+  var buttons = buttonList.getElementsByTagName("button");
+  for (var i = 0; i < buttons.length; i++) {
+    btn = buttons[i]
+    if (btn.getAttribute("value") == "{{ blog.status }}") {
+      new_btn = btn.cloneNode(true);
+      buttonList.removeChild(btn.parentNode);
+      submit = document.getElementById("id_submit");
+      submit.insertBefore(btn, submit.firstChild);
+    }
+  }
+}
 </script>
 {% endblock %}

@@ -23,6 +23,13 @@ class Blog(models.Model):
     raw_format = models.CharField(max_length=10, choices=RAW_FORMAT_CHOICES, default='html')
     active = models.BooleanField(default=True)
     tags = models.ManyToManyField(Tag, blank=True, null=True)
+    STATUS_CHOICES = (
+        ('public', 'Post'),
+        ('draft', 'Save as Draft'),
+        ('delete', 'Delete!'),
+        ('private', 'Private Only!'),
+    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='public')
 
     def __unicode__(self):
         return self.title

@@ -14,11 +14,13 @@ class BlogForm(forms.Form):
     body_raw = forms.CharField(label='正文', widget=forms.Textarea)
     raw_format = forms.ChoiceField(label='格式', choices=Blog.RAW_FORMAT_CHOICES)
     tags = forms.CharField(required=False, max_length=1024)
+    status = forms.CharField(max_length=100)
 
     def saveto(self, blog):
         blog.title = self.cleaned_data['title']
         blog.body_raw = self.cleaned_data['body_raw']
         blog.raw_format = self.cleaned_data['raw_format']
+        blog.status = self.cleaned_data['status']
 
         tags_str = self.cleaned_data['tags']
         tags = json.loads(tags_str, encoding="utf8")
