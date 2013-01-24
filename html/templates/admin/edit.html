@@ -146,11 +146,10 @@ window.onload = function () {
   var buttonList = document.getElementById("id_submit_choices");
   var buttons = buttonList.getElementsByTagName("button");
   for (var i = 0; i < buttons.length; i++) {
-    btn = buttons[i]
+    var btn = buttons[i]
     if (btn.getAttribute("value") == "{{ blog.status }}") {
-      new_btn = btn.cloneNode(true);
       buttonList.removeChild(btn.parentNode);
-      submit = document.getElementById("id_submit");
+      var submit = document.getElementById("id_submit");
       submit.insertBefore(btn, submit.firstChild);
       break;
     }
