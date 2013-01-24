@@ -47,7 +47,7 @@ def check_admin(request):
 
 class AdminView(ListView):
     model = Blog
-    queryset = Blog.objects.all().order_by("-date_create")
+    queryset = Blog.objects.exclude(status='delete').order_by("-date_create")
     template_name = 'admin/admin.html'
     paginate_by = 10
 
@@ -134,7 +134,7 @@ class BlogListView(ListView):
                     raise LookupError
             except:
                 raise http.Http404
-            self.queryset = queryset.order_by("-date_create")
+            self.queryset = queryset.filter(status='public').order_by("-date_create")
         return self.queryset
 
     def get_context_data(self, **kwargs):
