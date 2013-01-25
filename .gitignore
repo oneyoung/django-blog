@@ -1,4 +1,7 @@
 .*
 *.pyc
+*.diff
+*.patch
+*.orig
 db/
 blogsite/config.py
