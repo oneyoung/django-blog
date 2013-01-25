@@ -1,5 +1,7 @@
 {% extends "admin/base.html" %}
 
+{% load static from staticfiles %}
+
 {% block title %} Post Blog {% endblock %}
 
 {% block content %}
@@ -28,7 +30,7 @@
       <div><input name="title" type="text" id="id_title" maxlength="255"{% if not blog.title %} placeholder="Input your tilte here"{% else %}value="{{ blog.title }}"{% endif %} /></div>
     </td><tr>
     <tr><td>
-      <div><textarea name="body_raw" rows=30 placeholder="Content of your blog">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea></div>
+      <div><textarea name="body_raw" id="id_body_raw" rows=30 placeholder="Content of your blog">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea></div>
     </td><tr>
     <tr><td>
       {% for format in blog.RAW_FORMAT_CHOICES %}
@@ -154,6 +156,21 @@ window.onload = function () {
       break;
     }
   }
+  /* bootstrap-wysihtml5 */
+  /*
+  $("#id_body_raw").wysihtml5({
+    "html": true,
+    "color": true,
+    "stylesheets": ["{% static "plugins/bootstrap/wysihtml5/wysiwyg-color.css" %}"],
+  });
+  */
 }
 </script>
 {% endblock %}
+
+{% block src %}
+  <link rel="stylesheet" type="text/css" href="{% static "plugins/bootstrap/wysihtml5/bootstrap-wysihtml5-0.0.2.css" %}" />
+  <script src="{% static "plugins/wysihtml5-0.3.0.min.js" %}"></script>
+  <script src="{% static "plugins/bootstrap/wysihtml5/bootstrap-wysihtml5-0.0.2.min.js" %}"></script>
+{% endblock %}
+
