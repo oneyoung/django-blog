@@ -23,7 +23,7 @@
 }
 </style>
 {% load bootstrap_toolkit %}
-<form action="/admin/edit/?pk={{ pk }}" method="post" id="id_form_post" onsubmit="return submitPost()">
+<form action="/admin/edit/?pk={{ pk }}" method="post" id="id_form_post">
   {% csrf_token %}
   <table>
     <tr><td>
@@ -67,95 +67,52 @@
 </div>
 
 
+{% endblock %}
+
+{% block src %}
+  <link rel="stylesheet" type="text/css" href="{% static "plugins/bootstrap/wysihtml5/bootstrap-wysihtml5-0.0.2.css" %}" />
+  <script src="{% static "plugins/wysihtml5-0.3.0.min.js" %}"></script>
+  <script src="{% static "plugins/bootstrap/wysihtml5/bootstrap-wysihtml5-0.0.2.min.js" %}"></script>
+
 <script>
-function createTag(name) {
-  var tag = document.createElement("span");
-  tag.setAttribute("data-type", "tag");
-  tag.setAttribute("class", "label");
-  tag.setAttribute("id", "id_tag_" + name);
-  tag.textContent = name;
-  return tag;
-}
+var selectedFlag = "label-success";
 
-function selectTag(tag, select) {
-  var SELECTED = "label label-success";
-  var UNSELECTED = "label"
-  if (select) {
-    tag.setAttribute("class", SELECTED);
-  } else {
-    tag.setAttribute("class", UNSELECTED);
-  }
-}
+$('#id_taglist').delegate('span', 'click', function() {
+  $(this).toggleClass(selectedFlag);
+});
 
-function isTagSelected(tag) {
-  return !(tag.getAttribute("class").search("success") < 0);
-}
-
-function toggleTag(tag) {
-  if (isTagSelected(tag)) {
-    selectTag(tag, false);
-  } else {
-    selectTag(tag, true);
-  }
-}
-
-var tagList = document.getElementById("id_taglist");
-tagList.onclick = function(event) {
-  var tag = event.target;
-  if (tag.getAttribute("data-type") == "tag") {
-    toggleTag(tag);
-  }
-};
-
-var addBtn = document.getElementById("id_btn_addtag");
-addBtn.onclick = function(event) {
-  var tagInput = document.getElementById("id_txt_tag");
-  var name = tagInput.value
+$('#id_btn_addtag').click(function() {
+  var name = $('#id_txt_tag').val();
   if (name) {
-    var tag = document.getElementById("id_tag_" + name);
-    if (tag) {
-      selectTag(tag, true);
+    var tag = $("#id_tag_" + name);
+    if (tag.length) {
+      tag.addClass(selectedFlag);
     } else {
-      var newTag = createTag(name);
-      selectTag(newTag, true);
-      document.getElementById("id_taglist").appendChild(newTag);
+      $('<span data-type="tag" class="label label-success" id="id_tag_#name">#name</span>'.replace(/#name/g, name)).appendTo("#id_taglist");
     }
-    tagInput.value = ""
+    $('#id_txt_tag').val('');
   }
-};
+});
 
-function submitPost() {
-  var form = document.getElementById("id_form_post");
-  if (!form.elements["title"].value || !form.elements["body_raw"].value) {
-    alert("Title and Content must not be blank!");
-    return false
-  }
-  var allTags = document.getElementById("id_taglist").getElementsByTagName("span");
-  var tags = [];
-  for (var i = 0; i < allTags.length; i++) {
-    var tag = allTags[i];
-    if (isTagSelected(tag)) {
-      tags[tags.length] = tag.textContent;
+$("#id_form_post").submit(function () {
+  $(this).find('input[name="title"], input[name="body_raw"]').each(function () {
+    if (!$(this).val()) {
+      alert("Title and Content must not be blank!");
+      return false;
     }
-  }
-  form.elements["tags"].value = JSON.stringify(tags);
-  form.submit();
+  });
+  var tags = $("#id_taglist").find("." + selectedFlag).map(function(index, item) {
+    return item.textContent;
+  });
+  $(this).find('input[name="tags"]').each(function () {
+    $(this).val(JSON.stringify($.extend(true, [], tags)));
+  });
   return true;
-}
+});
 
 window.onload = function () {
   /* Submit Button */
-  var buttonList = document.getElementById("id_submit_choices");
-  var buttons = buttonList.getElementsByTagName("button");
-  for (var i = 0; i < buttons.length; i++) {
-    var btn = buttons[i]
-    if (btn.getAttribute("value") == "{{ blog.status }}") {
-      buttonList.removeChild(btn.parentNode);
-      var submit = document.getElementById("id_submit");
-      submit.insertBefore(btn, submit.firstChild);
-      break;
-    }
-  }
+  $('#id_submit').prepend($('#id_submit_choices button[value="{{ blog.status }}"]').detach());
   /* bootstrap-wysihtml5 */
   /*
   $("#id_body_raw").wysihtml5({
@@ -164,13 +121,6 @@ window.onload = function () {
     "stylesheets": ["{% static "plugins/bootstrap/wysihtml5/wysiwyg-color.css" %}"],
   });
   */
-}
+};
 </script>
 {% endblock %}
-
-{% block src %}
-  <link rel="stylesheet" type="text/css" href="{% static "plugins/bootstrap/wysihtml5/bootstrap-wysihtml5-0.0.2.css" %}" />
-  <script src="{% static "plugins/wysihtml5-0.3.0.min.js" %}"></script>
-  <script src="{% static "plugins/bootstrap/wysihtml5/bootstrap-wysihtml5-0.0.2.min.js" %}"></script>
-{% endblock %}
-
