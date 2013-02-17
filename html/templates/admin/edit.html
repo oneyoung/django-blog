@@ -83,7 +83,7 @@ $('#id_taglist').delegate('span', 'click', function() {
   $(this).toggleClass(selectedFlag);
 });
 
-$('#id_btn_addtag').click(function() {
+function addTag() {
   var name = $('#id_txt_tag').val();
   if (name) {
     var tag = $("#id_tag_" + name);
@@ -94,7 +94,16 @@ $('#id_btn_addtag').click(function() {
     }
     $('#id_txt_tag').val('');
   }
+}
+
+$('#id_txt_tag').keypress(function(e) {
+  var code = (e.keyCode ? e.keyCode : e.which);
+  if (code == 13) {
+    addTag()
+  }
 });
+
+$('#id_btn_addtag').click(addTag);
 
 $("#id_form_post").submit(function () {
   $(this).find('input[name="title"], input[name="body_raw"]').each(function () {
