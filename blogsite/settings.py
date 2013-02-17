@@ -2,8 +2,8 @@
 import os.path
 import config
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+#DEBUG = True
+#TEMPLATE_DEBUG = DEBUG
 
 ADMINS = config.ADMINS
 MANAGERS = ADMINS
