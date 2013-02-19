@@ -7,16 +7,16 @@
   <h1>{{ blog.title }}</h1>
   <p><i class="icon-calendar"></i> {{ blog.date_create|date:"o年n月j日" }} </p>
 </div>
-<content>
+<div class="content">
   {% autoescape off %}
     {{ blog.body_html }}
   {% endautoescape %}
-</content>
+</div>
 <div>
   <hr />
   <p><i class="icon-tags"></i> {% for tag in blog.tags.all %}<a href="{% url tag tag=tag.name %}"><span class="label label-info">{{ tag }}</span></a> {% endfor %}<p>
 </div>
-<comment>
+<div class="comment">
 
-</comment>
+</div>
 {% endblock %}

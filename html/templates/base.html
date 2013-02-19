@@ -20,8 +20,6 @@
         <div class="navbar-inner">
           <ul class="nav">
             <li><a href="{% url home %}">Home</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
           </ul>
         </div>
       </div>
@@ -32,17 +30,16 @@
         {% endblock %}
         </div>
         <div class="span3">
-        <h1>some informantion here</h1>
         <div>
       </div>
     </div>
   </div>
 </div>
+<!-- Bootstrap -->
+<script src="//lib.sinaapp.com/js/jquery/1.8/jquery.min.js"></script>
+<script src="{% static "plugins/bootstrap/bootstrap.min.js" %}"></script>
+<!-- Highlight.js -->
+<script src="{% static "plugins/highlight.pack.js" %}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
-  <!-- Bootstrap -->
-  <script src="//lib.sinaapp.com/js/jquery/1.8/jquery.min.js"></script>
-  <script src="{% static "plugins/bootstrap/bootstrap.js" %}"></script>
-  <!-- Highlight.js -->
-  <script src="{% static "plugins/highlight.pack.js" %}"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
 </html>
