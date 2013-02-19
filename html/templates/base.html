@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 {% load static from staticfiles %}
-<html lang="utf-8">
+<html lang="zh">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>{% block title %} Oneyung Blog {% endblock %}</title>
@@ -30,16 +30,16 @@
         {% endblock %}
         </div>
         <div class="span3">
-        <div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<!-- Bootstrap -->
+<script src="//lib.sinaapp.com/js/jquery/1.8/jquery.min.js"></script>
+<script src="{% static "plugins/bootstrap/bootstrap.min.js" %}"></script>
+<!-- Highlight.js -->
+<script src="{% static "plugins/highlight.pack.js" %}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
-  <!-- Bootstrap -->
-  <script src="//lib.sinaapp.com/js/jquery/1.8/jquery.min.js"></script>
-  <script src="{% static "plugins/bootstrap/bootstrap.min.js" %}"></script>
-  <!-- Highlight.js -->
-  <script src="{% static "plugins/highlight.pack.js" %}"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
 </html>
