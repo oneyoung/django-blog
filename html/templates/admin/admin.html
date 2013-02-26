@@ -18,11 +18,11 @@
 </div>
 <div class="span10">
   <div><a href="{% url edit %}"><button class="btn btn-success">New Post</button></a></div>
-  <table class="table">
-  {% for object in object_list %}
+  <table class="table" id="blog_list">
+  {% for blog in object_list %}
     <tr>
-      <td><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></td>
-      <td><a href="{% url edit %}?pk={{ object.pk }}"><button class="btn btn-primary"><i class="icon-pencil icon-white"></i>  Edit</button></a><td>
+      <td><span>{{ blog.status }}</span>   <a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></td>
+      <td><a href="{% url edit %}?pk={{ blog.pk }}"><button class="btn btn-primary edit-btn" style="display:none"><i class="icon-pencil icon-white"></i>  Edit</button></a><td>
     </tr>
   {% endfor %}
   </table>
@@ -42,4 +42,29 @@
   </div>
 </div>
 </div></div>
+{% endblock %}
+
+{% block src %}
+<script>
+window.onload = function() {
+  $('#blog_list td:first-child span:first-child').map(function() {
+    var type, val;
+    switch($(this).text()) {
+      case "public": type = "success"; val = "PUB"; break;
+      case "draft": type = "warning"; val = "DFT"; break;
+      case "private": type = "info"; val = "PRV"; break;
+      case "delete": type = "important"; val = "DEL"; break;
+    };
+    $(this).text(val);
+    $(this).addClass("label");
+    $(this).addClass("label-" + type);
+  });
+};
+
+$('#blog_list tr').hover(function () {
+  $(this).find("button[class*='edit-btn']").css('display', '');
+}, function() {
+  $(this).find("button[class*='edit-btn']").css('display', 'none');
+});
+</script>
 {% endblock %}

@@ -112,8 +112,8 @@ $("#id_form_post").submit(function () {
       return false;
     }
   });
-  var tags = $("#id_taglist").find("." + selectedFlag).map(function(index, item) {
-    return item.textContent;
+  var tags = $("#id_taglist").find("." + selectedFlag).map(function() {
+    return $(this).text();
   });
   $(this).find('input[name="tags"]').each(function () {
     $(this).val(JSON.stringify($.extend(true, [], tags)));
