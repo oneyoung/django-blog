@@ -45,3 +45,12 @@
 {% endif %}
 </div>
 {% endblock %}
+
+{% block script %}
+<script>
+$('#id_list blockquote').click(function (){
+  var link = $($(this).siblings('h1')[0]).find('a').attr('href');
+  $(location).attr('href', link);
+});
+</script>
+{% endblock %}
