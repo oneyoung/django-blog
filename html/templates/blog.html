@@ -2,10 +2,18 @@
 
 {% block title %}{{ blog.title }}{% endblock %}
 
+{% block head %}
+<style>
+hr { margin-top: 0.5em }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="page-header">
+<div>
   <h1>{{ blog.title }}</h1>
-  <p><i class="icon-calendar"></i> {{ blog.date_create|date:"o年n月j日" }} </p>
+  <p><i class="icon-calendar"></i> {{ blog.date_create|date:"o年n月j日" }}
+  <a style="float: right" class="label" href="#disqus_thread"><i class="icon-comment"></i> Comments</a></p>
+  <hr />
 </div>
 <div class="content">
   {% autoescape off %}
@@ -13,8 +21,8 @@
   {% endautoescape %}
 </div>
 <div>
+  <p style="margin-top: 1.5em"><i class="icon-tags"></i> {% for tag in blog.tags.all %}<a href="{% url tag tag=tag.name %}"><span class="label label-info">{{ tag }}</span></a> {% endfor %}</p>
   <hr />
-  <p><i class="icon-tags"></i> {% for tag in blog.tags.all %}<a href="{% url tag tag=tag.name %}"><span class="label label-info">{{ tag }}</span></a> {% endfor %}<p>
 </div>
 <div class="comment">
 <div id="disqus_thread"></div>
