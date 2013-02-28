@@ -10,12 +10,14 @@
   {% endif %}
 {% endspaceless %}{% endblock %}
 
-{% block content %}
-<style scoped>
+{% block head %}
+<style>
 #id_list .blog-date { float: right }
 #id_list blockquote { cursor: pointer }
 </style>
+{% endblock %}
 
+{% block content %}
 <div id="id_list">
 {% for blog in blogs %}
   <div class="page-header">
