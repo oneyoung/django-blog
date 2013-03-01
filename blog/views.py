@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse, resolve
 from django.core import exceptions
 from django.views.generic import FormView, DetailView, ListView
-from models import Blog, Tag
+from models import Blog, Tag, Setting
 from forms import AdminUserForm, BlogForm
 
 
@@ -95,6 +95,26 @@ class EditView(FormView):
             form.saveto(blog)
         else:
             return self.render_to_response({'blog': blog, 'pk': pk, 'tags': Tag.objects.all()})
+        return http.HttpResponseRedirect(self.get_success_url())
+
+
+class SettingView(FormView):
+    form_class = Setting
+    template_name = 'admin/setting.html'
+    success_url = '/admin/'
+
+    def dispatch(self, request, *args, **kwargs):
+        check_admin(request)  # if not admin, will show 403 page
+        return super(self.__class__, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response({})
+
+    def post(self, request, *args, **kwargs):
+        for name, value in request.POST.items():
+            setting, created = Setting.objects.get_or_create(name=name)
+            setting.value = value
+            setting.save()
         return http.HttpResponseRedirect(self.get_success_url())
 
 
