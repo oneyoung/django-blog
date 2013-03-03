@@ -98,9 +98,9 @@ class EditView(FormView):
         return http.HttpResponseRedirect(self.get_success_url())
 
 
-class SettingView(FormView):
+class SettingsView(FormView):
     form_class = Setting
-    template_name = 'admin/setting.html'
+    template_name = 'admin/settings.html'
     success_url = '/admin/'
 
     def dispatch(self, request, *args, **kwargs):

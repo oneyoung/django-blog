@@ -4,7 +4,7 @@
 
 {% block content %}
 {% load settings %}
-<form action="/admin/setting/" method="post">
+<form action="{% url settings %}" method="post">
   {% csrf_token %}
   {% get_options as options %}
   {% for option in options %}
