@@ -6,10 +6,11 @@
 {% load settings %}
 <form action="/admin/setting/" method="post">
   {% csrf_token %}
+  {% get_options as options %}
   {% for option in options %}
   <label class="control-label" for="id_{{ option.name }}">{{ option.help }}</label>
   <div class="controls">
-  <input id="id_{{ option.name }}" type="text" name="{{ option.name }}" maxlength="100" />
+  <input id="id_{{ option.name }}" type="text" name="{{ option.name }}" value="{{ option.value }}" maxlength="100" />
   </div>
   {% endfor %}
   <input type="submit" value="OK" class="btn btn-success" />

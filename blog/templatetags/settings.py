@@ -24,13 +24,14 @@ def get_setting(name):
     return value
 
 
-@register.simple_tag
+@register.assignment_tag
 def get_options():
     result = []
     for name, hint in OPTIONS:
-        result += {
+        option, created = Setting.objects.get_or_create(name=name)
+        result.append({
             'name': name,
             'help': hint,
-            'value': Setting.objects.get_or_create(name=name).value
-        }
+            'value': option.value
+        })
     return result
