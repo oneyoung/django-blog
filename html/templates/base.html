@@ -4,7 +4,7 @@
 <html lang="utf-8">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{% block title %} Oneyung Blog {% endblock %}</title>
+  <title>{% block title %} {% get_setting "blog_name" %} {% endblock %}</title>
   <link href="{% static "css/syntax.css" %}" rel="stylesheet">
   <!-- Bootstrap -->
   <link href="{% static "plugins/bootstrap/bootstrap.min.css" %}" rel="stylesheet" media="screen">
@@ -15,8 +15,8 @@
   <div class="row">
     <div class="span12">
       <div class="hero-unit">
-        <h1>Oneyoung</h1>
-        <p>This is oneyoung's blog.</p>
+        <h1>{% get_setting "blog_name" %}</h1>
+        <p>{% get_setting "blog_desc" %}</p>
       </div>
       <div class="navbar">
         <div class="navbar-inner">
