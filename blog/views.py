@@ -3,9 +3,9 @@
 from django import http
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse, resolve
-from django.core import exceptions
+#from django.core import exceptions
 from django.views.generic import FormView, DetailView, ListView
-from models import Blog, Tag
+from models import Blog, Tag, Setting
 from forms import AdminUserForm, BlogForm
 
 
@@ -37,29 +37,27 @@ def logout_view(request):
     return http.HttpResponseRedirect('/')
 
 
-def check_admin(request):
-    user = request.user
-    if user and user.is_authenticated() and user.is_superuser:
-        pass
-    else:
-        raise exceptions.PermissionDenied
+def check_permission(cls):
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        if user and user.is_authenticated() and user.is_superuser:
+            return super(self.__class__, self).dispatch(request, *args, **kwargs)
+        else:
+            return http.HttpResponseRedirect(reverse("admin_login"))
+
+    cls.dispatch = dispatch
+    return cls
 
 
+@check_permission
 class AdminView(ListView):
     model = Blog
     queryset = Blog.objects.exclude(status='delete').order_by("-date_create")
     template_name = 'admin/admin.html'
     paginate_by = 10
 
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            check_admin(request)
-        except exceptions.PermissionDenied:
-            return http.HttpResponseRedirect(reverse("admin_login"))
 
-        return super(self.__class__, self).dispatch(request, *args, **kwargs)
-
-
+@check_permission
 class EditView(FormView):
     '''
     kwargs for url
@@ -69,10 +67,6 @@ class EditView(FormView):
     form_class = BlogForm
     template_name = 'admin/edit.html'
     success_url = '/admin/'
-
-    def dispatch(self, request, *args, **kwargs):
-        check_admin(request)  # if not admin, will show 403 page
-        return super(self.__class__, self).dispatch(request, *args, **kwargs)
 
     @staticmethod
     def _get_blog(pk):
@@ -95,6 +89,23 @@ class EditView(FormView):
             form.saveto(blog)
         else:
             return self.render_to_response({'blog': blog, 'pk': pk, 'tags': Tag.objects.all()})
+        return http.HttpResponseRedirect(self.get_success_url())
+
+
+@check_permission
+class SettingsView(FormView):
+    form_class = Setting
+    template_name = 'admin/settings.html'
+    success_url = '/admin/'
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response({})
+
+    def post(self, request, *args, **kwargs):
+        for name, value in request.POST.items():
+            setting, created = Setting.objects.get_or_create(name=name)
+            setting.value = value
+            setting.save()
         return http.HttpResponseRedirect(self.get_success_url())
 
 

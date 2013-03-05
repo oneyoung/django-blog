@@ -10,11 +10,14 @@
   {% endif %}
 {% endspaceless %}{% endblock %}
 
-{% block content %}
-<style scoped>
-#id_list .blog-date { float:right }
+{% block head %}
+<style>
+#id_list .blog-date { float: right }
+#id_list blockquote { cursor: pointer }
 </style>
+{% endblock %}
 
+{% block content %}
 <div id="id_list">
 {% for blog in blogs %}
   <div class="page-header">
@@ -44,4 +47,13 @@
   </ul>
 {% endif %}
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+$('#id_list blockquote').click(function (){
+  var link = $($(this).siblings('h1')[0]).find('a').attr('href');
+  $(location).attr('href', link);
+});
+</script>
 {% endblock %}

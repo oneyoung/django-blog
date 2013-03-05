@@ -2,6 +2,14 @@ from django.db import models
 from datetime import datetime
 
 
+class Setting(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    value = models.CharField(max_length=1024, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)
 

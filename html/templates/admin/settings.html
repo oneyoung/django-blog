@@ -1,0 +1,18 @@
+{% extends "admin/base.html" %}
+
+{% block title %} setting {% endblock %}
+
+{% block content %}
+{% load settings %}
+<form action="{% url settings %}" method="post">
+  {% csrf_token %}
+  {% get_options as options %}
+  {% for option in options %}
+  <label class="control-label" for="id_{{ option.name }}">{{ option.help }}</label>
+  <div class="controls">
+  <input id="id_{{ option.name }}" type="text" name="{{ option.name }}" value="{{ option.value }}" maxlength="100" />
+  </div>
+  {% endfor %}
+  <input type="submit" value="OK" class="btn btn-success" />
+</form>
+{% endblock %}

@@ -4,7 +4,7 @@
 
 {% block title %} Post Blog {% endblock %}
 
-{% block content %}
+{% block head %}
 <style type="text/css">
 #id_title, table, textarea {
   width: 100%;
@@ -22,6 +22,9 @@
   width: 50%;
 }
 </style>
+{% endblock %}
+
+{% block content %}
 {% load bootstrap_toolkit %}
 <form action="/admin/edit/?pk={{ pk }}" method="post" id="id_form_post">
   {% csrf_token %}
@@ -112,8 +115,8 @@ $("#id_form_post").submit(function () {
       return false;
     }
   });
-  var tags = $("#id_taglist").find("." + selectedFlag).map(function(index, item) {
-    return item.textContent;
+  var tags = $("#id_taglist").find("." + selectedFlag).map(function() {
+    return $(this).text();
   });
   $(this).find('input[name="tags"]').each(function () {
     $(this).val(JSON.stringify($.extend(true, [], tags)));
