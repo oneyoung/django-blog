@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse, resolve
 #from django.core import exceptions
 from django.views.generic import FormView, DetailView, ListView
+from django.contrib.syndication.views import Feed
 from models import Blog, Tag, Setting
 from forms import AdminUserForm, BlogForm
 
@@ -152,3 +153,21 @@ class BlogListView(ListView):
         context = kwargs
         context.update(self._context)
         return super(self.__class__, self).get_context_data(**context)
+
+
+class RSSFeed(Feed):
+    def link(self):
+        return reverse('feed')
+
+    def items(self):
+        queryset = Blog.objects.all()
+        return queryset.filter(status='public').order_by("-date_create")[0:8]
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.body_html
+
+    def item_link(self, item):
+        return item.get_absolute_url()

@@ -18,6 +18,7 @@ urlpatterns = patterns('',
         views.BlogListView.as_view(), name='date'),
     url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/(?P<slug>.+)/$',
         views.BlogView.as_view(), name='blog'),
+    url(r'^feed/$', views.RSSFeed(), name='feed'),
     # Examples:
     # url(r'^$', 'blogsite.views.home', name='home'),
     # url(r'^blogsite/', include('blogsite.foo.urls')),
