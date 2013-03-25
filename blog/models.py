@@ -76,3 +76,16 @@ class Blog(models.Model):
             'year': self.date_create.strftime('%Y'),
             'month': self.date_create.strftime('%m'),
             'slug': self.slug})
+
+
+class Image(models.Model):
+    idx = models.AutoField(primary_key=True)
+    img = models.ImageField(upload_to='image/', blank=True, null=True)
+    img_url = models.URLField(blank=True, null=True)
+    thumb = models.ImageField(upload_to='image/thumb/', blank=True, null=True)
+    thumb_url = models.URLField(blank=True, null=True)
+
+    desc = models.TextField(blank=True, null=True)
+
+    status = models.CharField(max_length=15, default='')
+    active = models.BooleanField(default=True)
