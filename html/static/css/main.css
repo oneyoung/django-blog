@@ -1,0 +1,15 @@
+/*
+.blog-main {
+  width: 960px;
+}
+*/
+
+.blog-main {
+  background-color: #efefef;
+}
+
+.blog-block {
+  background-color: white;
+  padding: 30px;
+  margin: 30px;
+}

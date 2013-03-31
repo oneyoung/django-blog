@@ -5,38 +5,39 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>{% block title %} {% get_setting "blog_name" %} {% endblock %}</title>
+  <link href="{% static "css/main.css" %}" rel="stylesheet">
   <link href="{% static "css/syntax.css" %}" rel="stylesheet">
   <!-- Bootstrap -->
   <link href="{% static "plugins/bootstrap/bootstrap.min.css" %}" rel="stylesheet" media="screen">
   {% block head %}{% endblock %}
 </head>
-<body>
-<div class="container">
-  <div class="row">
-    <div class="span12">
-      <div class="hero-unit">
-        <h1>{% get_setting "blog_name" %}</h1>
-        <p>{% get_setting "blog_desc" %}</p>
-      </div>
-      <div class="navbar">
-        <div class="navbar-inner">
-          <ul class="nav">
-            <li><a href="{% url home %}">Home</a></li>
-          </ul>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="span9">
-        {% block content %}
-        {% endblock %}
-        </div>
-        <div class="span3">
-        <div>
-      </div>
+<body>
+<div class="blog-head">
+  <div class="hero-unit">
+    <div class="row-fluid">
+    <div class="span8 offset2">
+      <h1>{% get_setting "blog_name" %}</h1>
+      <p>{% get_setting "blog_desc" %}</p>
+    </div>
     </div>
   </div>
 </div>
+
+<div class="blog-main">
+  <div class="row-fluid">
+    <div class="span8 offset2">
+    {% block content %}
+    {% endblock %}
+    </div>
+  </div>
+</div>
+
+<div class="blog-foot">
+  <div class="hero-unit">
+  </div>
+</div>
+
 <!-- Bootstrap -->
 <script src="//lib.sinaapp.com/js/jquery/1.8/jquery.min.js"></script>
 <script src="{% static "plugins/bootstrap/bootstrap.min.js" %}"></script>
