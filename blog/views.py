@@ -1,12 +1,13 @@
 # -*- coding: utf8 -*-
 # Create your views here.
+import json
 from django import http
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse, resolve
 #from django.core import exceptions
 from django.views.generic import FormView, DetailView, ListView
 from django.contrib.syndication.views import Feed
-from models import Blog, Tag, Setting
+from models import Blog, Tag, Setting, Image
 from forms import AdminUserForm, BlogForm
 
 
@@ -56,6 +57,32 @@ class AdminView(ListView):
     queryset = Blog.objects.exclude(status='delete').order_by("-date_create")
     template_name = 'admin/admin.html'
     paginate_by = 10
+
+
+@check_permission
+class UploadImageView(FormView):
+    def post(self, request, *args, **kwargs):
+        result = {}
+        for name in request.FILES:
+            fobj = request.FILES[name]
+            fname = fobj.name
+            try:
+                image = Image()
+                image.img.save(fname, fobj)
+                image.save()
+                result[fname] = {
+                    'status': True,
+                    'idx': image.idx,
+                    'url': image.img_url,
+                    'thumb': image.thumb_url,
+                    'msg': 'OK',
+                }
+            except Exception, e:
+                result[fname] = {
+                    'status': False,
+                    'msg': str(e),
+                }
+        return http.HttpResponse(json.dumps(result))
 
 
 @check_permission
