@@ -13,28 +13,37 @@
 </head>
 
 <body>
-<div class="blog-head">
-  <div class="hero-unit">
+<div class="blog-body">
+  <div class="blog-head">
+    <div class="navbar navbar-inverse blog-navbar">
+      <div class="navbar-inner">
+        <ul class="nav">
+          <li><a href="{% url home %}">Home</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hero-unit">
+      <div class="row-fluid">
+      <div class="span8 offset2">
+        <h1>{% get_setting "blog_name" %}</h1>
+        <p>{% get_setting "blog_desc" %}</p>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="blog-main">
     <div class="row-fluid">
-    <div class="span8 offset2">
-      <h1>{% get_setting "blog_name" %}</h1>
-      <p>{% get_setting "blog_desc" %}</p>
-    </div>
-    </div>
-  </div>
-</div>
-
-<div class="blog-main">
-  <div class="row-fluid">
-    <div class="span8 offset2">
-    {% block content %}
-    {% endblock %}
+      <div class="span8 offset2">
+      {% block content %}
+      {% endblock %}
+      </div>
     </div>
   </div>
-</div>
 
-<div class="blog-foot">
-  <div class="hero-unit">
+  <div class="blog-foot">
+    <div class="hero-unit">
+    </div>
   </div>
 </div>
 
