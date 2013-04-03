@@ -27,6 +27,7 @@ class Blog(models.Model):
     RAW_FORMAT_CHOICES = (
         ('html', 'HTML Format'),
         ('md', 'Markdown'),
+        ('album', 'Photo Album'),
     )
     raw_format = models.CharField(max_length=10, choices=RAW_FORMAT_CHOICES, default='html')
     active = models.BooleanField(default=True)
@@ -89,6 +90,8 @@ class Image(models.Model):
 
     status = models.CharField(max_length=15, default='')
     active = models.BooleanField(default=True)
+
+    blogs = models.ForeignKey(Blog, blank=True, null=True)
 
     def _get_img_url(self):
         return self._img_url if self._img_url else self.img.url
