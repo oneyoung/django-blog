@@ -33,7 +33,7 @@ image desc here
 ```html
 <div id="album-cover">
 	<img src="cover_thumb" alt="desc" data-id="[ImageID]" data-src="srcurl" />
-<div>
+</div>
 
 <div id="album-desc">
 	image desc here

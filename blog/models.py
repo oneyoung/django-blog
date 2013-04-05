@@ -57,7 +57,27 @@ class Blog(models.Model):
                 return md.convert(raw)
 
             def album2html(raw):
-                return raw
+                from bs4 import BeautifulSoup
+
+                soup = BeautifulSoup(raw)
+                desc = soup.find(id='album-desc')
+
+                images = soup.find(id='album-images')
+                for imgtag in images.find_all(['img']):
+                    idx = imgtag.get('data-id')
+                    img = Image.objects.get(idx=idx)
+                    imgtag['src'] = img.thumb_url
+                    imgtag['alt'] = img.desc if img.desc else ''
+                    imgtag['data-src'] = img.img_url
+
+                divcover = soup.new_tag('div', id='album-cover')
+                coverid = images.get('data-cover')
+                coverimg = images.find(lambda tag: tag.get('data-id') == coverid)
+                import copy
+                divcover.append(copy.deepcopy(coverimg))
+
+                return '\n'.join(map(lambda div: div.prettify(),
+                                     [divcover, desc, images]))
 
             if type == 'md':
                 html = md2html(raw)
