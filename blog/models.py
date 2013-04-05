@@ -44,18 +44,24 @@ class Blog(models.Model):
         return self.title
 
     def save(self, **kwargs):
-        if not self.id:  # new object here
-            slug = self.title.replace(' ', '-')
+        def alloc_slug(title):
+            slug = title.replace(' ', '-')
             if Blog.objects.filter(slug=slug):  # found slug conflict
                 slug = slug + datetime.now().strftime("_%y%m%d-%H%M%S")
-            self.slug = slug
+            return slug
 
-        if self.raw_format == 'md':
-            import markdown
-            md = markdown.Markdown(extensions=['fenced_code'])
-            self.body_html = md.convert(self.body_raw)
-        elif self.raw_format == 'html':
-            self.body_html = self.body_raw
+        def raw2html(raw, type):
+            if type == 'md':
+                import markdown
+                md = markdown.Markdown(extensions=['fenced_code'])
+                html = md.convert(raw)
+            elif type == 'html':
+                html = raw
+            return html
+
+        if not self.id:  # new object here
+            self.slug = alloc_slug(self.title)
+        self.body_html = raw2html(self.body_raw, self.raw_format)
 
         self.full_clean()
         models.Model.save(self, **kwargs)
