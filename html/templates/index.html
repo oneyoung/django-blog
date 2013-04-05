@@ -20,7 +20,7 @@
 {% block content %}
 <div id="id_list">
 {% for blog in blogs %}
-  <div class="page-header">
+  <div class="blog-block">
     <h1><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></h1>
     <blockquote>{% autoescape off %}{{ blog.body_html|truncatewords_html:30}}{% endautoescape %}</blockquote>
     <div>

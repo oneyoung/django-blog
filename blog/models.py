@@ -27,6 +27,7 @@ class Blog(models.Model):
     RAW_FORMAT_CHOICES = (
         ('html', 'HTML Format'),
         ('md', 'Markdown'),
+        ('album', 'Photo Album'),
     )
     raw_format = models.CharField(max_length=10, choices=RAW_FORMAT_CHOICES, default='html')
     active = models.BooleanField(default=True)
@@ -76,3 +77,40 @@ class Blog(models.Model):
             'year': self.date_create.strftime('%Y'),
             'month': self.date_create.strftime('%m'),
             'slug': self.slug})
+
+
+class Image(models.Model):
+    idx = models.AutoField(primary_key=True)
+    img = models.ImageField(upload_to='image/', blank=True, null=True)
+    _img_url = models.URLField(blank=True, null=True)
+    thumb = models.ImageField(upload_to='image/thumb/', blank=True, null=True)
+    _thumb_url = models.URLField(blank=True, null=True)
+
+    desc = models.TextField(blank=True, null=True)
+
+    status = models.CharField(max_length=15, default='')
+    active = models.BooleanField(default=True)
+
+    blogs = models.ForeignKey(Blog, blank=True, null=True)
+
+    def _get_img_url(self):
+        return self._img_url if self._img_url else self.img.url
+
+    def _set_img_url(self, url):
+        self._img_url = url
+
+    img_url = property(_get_img_url, _set_img_url)
+
+    def _get_thumb_url(self):
+        if self._thumb_url:
+            url = self._thumb_url
+        elif self.thumb:
+            url = self.thumb.url
+        else:
+            url = self.img_url
+        return url
+
+    def _set_thumb_url(self, url):
+        self._thumb_url = url
+
+    thumb_url = property(_get_thumb_url, _set_thumb_url)

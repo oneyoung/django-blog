@@ -5,38 +5,59 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>{% block title %} {% get_setting "blog_name" %} {% endblock %}</title>
+  <link href="{% static "css/main.css" %}" rel="stylesheet">
   <link href="{% static "css/syntax.css" %}" rel="stylesheet">
   <!-- Bootstrap -->
   <link href="{% static "plugins/bootstrap/bootstrap.min.css" %}" rel="stylesheet" media="screen">
   {% block head %}{% endblock %}
 </head>
+
 <body>
-<div class="container">
-  <div class="row">
-    <div class="span12">
-      <div class="hero-unit">
+<div class="blog-body">
+  <div class="blog-head">
+    <div class="navbar navbar-inverse blog-navbar">
+      <div class="navbar-inner">
+        <ul class="nav">
+          <li><a href="{% url home %}">Home</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="hero-unit">
+      <div class="row-fluid">
+      <div class="span8 offset2">
         <h1>{% get_setting "blog_name" %}</h1>
         <p>{% get_setting "blog_desc" %}</p>
       </div>
-      <div class="navbar">
-        <div class="navbar-inner">
-          <ul class="nav">
-            <li><a href="{% url home %}">Home</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="span9">
-        {% block content %}
-        {% endblock %}
-        </div>
-        <div class="span3">
-        <div>
       </div>
     </div>
   </div>
+
+  <div class="blog-main">
+    <div class="row-fluid">
+      <div class="span8 offset2">
+      {% block content %}
+      {% endblock %}
+      </div>
+    </div>
+  </div>
+
+  <div class="blog-foot">
+    <table>
+      <tr>
+        <td>
+          <a href="http://www.djangoproject.com/"><img src="https://www.djangoproject.com/m/img/badges/djangopowered126x54.gif" border="0" alt="Powered by Django." title="Powered by Django." /></a>
+        </td>
+        <td>
+          <div id="github"><a href="https://github.com/oneyoung/django-blog"><img alt="GitHub icon" src="{% static "img/github_icon.png" %}"></a></div>
+        </td>
+      </tr>
+    </table>
+    <div id="bottom">
+      <p></p>
+    </div>
+  </div>
 </div>
+
 <!-- Bootstrap -->
 <script src="//lib.sinaapp.com/js/jquery/1.8/jquery.min.js"></script>
 <script src="{% static "plugins/bootstrap/bootstrap.min.js" %}"></script>

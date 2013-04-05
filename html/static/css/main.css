@@ -1,0 +1,55 @@
+.blog-body {
+  background-color: #efefef;
+  background-attachment: fixed;
+  background-image: url("../img/background.jpg");
+  background-position: center;
+}
+
+.blog-head .blog-navbar {
+  background-color: black;
+  margin: 0px;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
+
+.blog-head .hero-unit {
+  margin: 0px;
+  zoom: 1;
+  filter: alpha(opacity=70);
+  opacity: 0.7;
+}
+
+.blog-block {
+  background-color: white;
+  padding: 30px;
+  margin: 30px;
+  zoom: 1;
+  filter: alpha(opacity=93);
+  opacity: 0.93;
+}
+
+.blog-foot {
+  background-color: gray;
+  padding-top: 20px;
+  filter: alpha(opacity=85);
+  opacity: 0.85;
+}
+
+.blog-foot table {
+  margin: 0 auto;
+}
+
+.blog-foot table td {
+  padding: 10px;
+}
+
+#github img {
+  height: 70px;
+}
+
+#bottom {
+  background-color: black;
+  padding: 0.5em;
+  text-align: center;
+}
