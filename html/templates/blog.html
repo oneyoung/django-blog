@@ -16,7 +16,7 @@
 
     $('#goto-comments').click(function() {
       $('html body').animate({
-        scrollTop: $('#comments').offset().top
+        scrollTop: $('#disqus_thread').offset().top
       }, 400);
     });
   };
@@ -42,7 +42,7 @@
   </div>
 </div>
 
-<div class="comment blog-block" id="comments">
+<div class="comment blog-block" id="disqus_thread">
   <script type="text/javascript">
       /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
       var disqus_shortname = '{% get_setting "disqus_shortname" %}'; // required: replace example with your forum shortname

@@ -15,6 +15,7 @@ def check_moudle(name, package=None):
 check_moudle('django_evolution')
 check_moudle('markdown')
 check_moudle('bootstrap_toolkit', 'django-bootstrap-toolkit')
+check_moudle('PIL', 'pil')
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 
