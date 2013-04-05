@@ -51,12 +51,20 @@ class Blog(models.Model):
             return slug
 
         def raw2html(raw, type):
-            if type == 'md':
+            def md2html(raw):
                 import markdown
                 md = markdown.Markdown(extensions=['fenced_code'])
-                html = md.convert(raw)
+                return md.convert(raw)
+
+            def album2html(raw):
+                return raw
+
+            if type == 'md':
+                html = md2html(raw)
             elif type == 'html':
                 html = raw
+            elif type == 'album':
+                html = album2html(raw)
             return html
 
         if not self.id:  # new object here

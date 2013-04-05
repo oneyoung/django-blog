@@ -1,8 +1,13 @@
+html, body {
+  height: 100%;
+}
+
 .blog-body {
   background-color: #efefef;
   background-attachment: fixed;
   background-image: url("../img/background.jpg");
   background-position: center;
+  min-height: 100%;
 }
 
 .blog-head .blog-navbar {
