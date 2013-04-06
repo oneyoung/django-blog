@@ -10,6 +10,39 @@ an image represented by database has the below attribute:
 * `thumb_url` -- url for image thumb
 * `desc` -- a brief introduction to the pic
 
+## web api
+### /admin/imginfo
+* support POST request
+* all the data in JSON format
+
+request:
+
+```
+{
+	"ID1": {
+		'action': 'write'/'read',
+		'desc': IMG_DESC, # requred for write opeartion
+	},
+	"ID2": ...
+}
+```
+
+response:
+
+```
+{
+	"ID1": {
+		'status': true/false, # true -- success, false -- failure
+		'msg': MSG_FOR_FAIL, # only show msg when status == false
+		# below fields is for 'read' option
+		'img_url': IMG_URL,
+		'thumb_url': THUMB_URL,
+		'desc': IMG_DESC,
+	},
+	"ID2": ...
+}
+```
+
 ## raw format defination for album
 When someone want to post a album page to database, he needs to give
 

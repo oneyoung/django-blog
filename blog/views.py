@@ -86,6 +86,41 @@ class UploadImageView(FormView):
 
 
 @check_permission
+class ImageInfoView(FormView):
+    def post(self, request, *args, **kwargs):
+        reqs = json.loads(request.read())
+        response = {}
+        for idx in reqs:
+            req = reqs[idx]
+            try:
+                if req.get('action') == 'read':
+                    img = Image.objects.get(idx=idx)
+                    result = {
+                        'status': True,
+                        'img_url': img.img_url,
+                        'thumb_url': img.thumb_url,
+                        'desc': img.desc,
+                    }
+                elif req.get('action') == 'write':
+                    img = Image.objects.get(idx=idx)
+                    img.desc = req.get('desc')
+                    img.save()
+                    result = {'status': True}
+                else:
+                    result = {
+                        'status': False,
+                        'msg': 'wrong action code, should be "read" or "write"'
+                    }
+            except Exception, e:
+                result = {
+                    'status': False,
+                    'msg': str(e),
+                }
+            response[idx] = result
+        return http.HttpResponse(json.dumps(response))
+
+
+@check_permission
 class EditView(FormView):
     '''
     kwargs for url
