@@ -66,6 +66,7 @@ class Blog(models.Model):
                 for imgtag in images.find_all(['img']):
                     idx = imgtag.get('data-id')
                     img = Image.objects.get(idx=idx)
+                    self.image_set.add(img)
                     imgtag['src'] = img.thumb_url
                     imgtag['alt'] = img.desc if img.desc else ''
                     imgtag['data-src'] = img.img_url
@@ -125,7 +126,7 @@ class Image(models.Model):
     status = models.CharField(max_length=15, default='')
     active = models.BooleanField(default=True)
 
-    blogs = models.ForeignKey(Blog, blank=True, null=True)
+    blog = models.ForeignKey(Blog, blank=True, null=True)
 
     def _get_img_url(self):
         return self._img_url if self._img_url else self.img.url
