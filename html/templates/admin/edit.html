@@ -44,6 +44,9 @@
         <div id="id_images">
           <div class="image" style="display:none">
             <img src="#" alt=""/>
+            <div class="progress progress-strip active">
+              <div class="bar" style="width: 0%"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -161,16 +164,32 @@ function albumLoad(load) {
         console.info(this);
         var type = /image\/.*/i;
         if (type.test(this.type)) {
+          /* display upload file */
           var reader = new FileReader();
+          var imgdiv = $('#id_uploadimg .image:first-child').clone();
           reader.onload = function(e) {
-            var imgdiv = $('#id_uploadimg .image:first-child').clone();
-            var imgtag = $(imgdiv.children('img')[0]);
+            var imgtag = $(imgdiv.find('img')[0]);
             imgtag.attr('src', e.target.result);
             imgtag.attr('alt', this.name);
             imgdiv.css('display', '');
             imgdiv.appendTo('#id_images');
           };
           reader.readAsDataURL(this);
+
+          /* upload file */
+          var xhr = new XMLHttpRequest();
+          function updateProgress(e) {
+            var bar = $(imgdiv.find('.progress .bar')[0]);
+            var percentage = Math.floor((e.loaded/e.total*1000)/10) + '%';
+            bar.css('width', percentage);
+          }
+          if (xhr.upload) {
+            xhr.upload.onprogress = updateProgress;
+          }
+          xhr.open('post', '{% url uploadimg %}', true);
+          var fd = new FormData;
+          fd.append(this.name, this);
+          xhr.send(fd);
         } else {
           alert(this.name + " is not an image file.");
         }
