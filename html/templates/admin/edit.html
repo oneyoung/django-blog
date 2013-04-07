@@ -21,6 +21,11 @@
 #id_table_tag td {
   width: 50%;
 }
+
+.image img {
+  height: 100px;
+}
+
 </style>
 {% endblock %}
 
@@ -34,6 +39,14 @@
     </td><tr>
     <tr><td>
       <div><textarea name="body_raw" id="id_body_raw" rows=30 placeholder="Content of your blog">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea></div>
+      <div id="id_uploadimg" style="display:none">
+        <input type="file" multiple />
+        <div id="id_images">
+          <div class="image" style="display:none">
+            <img src="#" alt=""/>
+          </div>
+        </div>
+      </div>
     </td><tr>
     <tr><td>
       {% for format in blog.RAW_FORMAT_CHOICES %}
@@ -140,12 +153,44 @@ function wysihtml5Load(load) {
   }
 }
 
+function albumLoad(load) {
+  if (load) {
+    $('#id_uploadimg').css('display', '');
+    $('#id_uploadimg input').change(function() {
+      $(this.files).map(function() {
+        console.info(this);
+        var type = /image\/.*/i;
+        if (type.test(this.type)) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            var imgdiv = $('#id_uploadimg .image:first-child').clone();
+            var imgtag = $(imgdiv.children('img')[0]);
+            imgtag.attr('src', e.target.result);
+            imgtag.attr('alt', this.name);
+            imgdiv.css('display', '');
+            imgdiv.appendTo('#id_images');
+          };
+          reader.readAsDataURL(this);
+        } else {
+          alert(this.name + " is not an image file.");
+        }
+      });
+    })
+  } else {
+    $('#id_uploadimg').css('display', 'none');
+  }
+}
+
 $('#id_form_post input:radio').change(function() {
   var type = $(this).val();
   if (type == "html") {
     wysihtml5Load(true);
   } else {
     wysihtml5Load(false);
+  }
+
+  if (type == "album") {
+    albumLoad(true);
   }
 });
 
