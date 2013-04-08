@@ -73,9 +73,8 @@ class UploadImageView(FormView):
                 result[fname] = {
                     'status': True,
                     'idx': image.idx,
-                    'url': image.img_url,
-                    'thumb': image.thumb_url,
-                    'msg': 'OK',
+                    'img_url': image.img_url,
+                    'thumb_url': image.thumb_url,
                 }
             except Exception, e:
                 result[fname] = {

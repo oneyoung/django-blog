@@ -11,6 +11,25 @@ an image represented by database has the below attribute:
 * `desc` -- a brief introduction to the pic
 
 ## web api
+### /admin/uploadimg
+* post files to this api
+* response is in JSON format
+
+response:
+```
+{
+	"img_name_1": { # success example
+		"status": true,
+		"idx": IMG_IDX,
+		"img_url": IMG_URL,
+		"thumb_url": THUMB_URL,
+	},
+	"img_name_2": { # failed example
+		"status": false,
+		"msg": ERROR_MSG,
+	}
+}
+```
 ### /admin/imginfo
 * support POST request
 * all the data in JSON format
