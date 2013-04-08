@@ -158,7 +158,31 @@ function wysihtml5Load(load) {
 
 function albumLoad(load) {
   if (load) {
+    /* load raw and convert */
+    raw = $($('#id_body_raw').val());
+    $('#id_body_raw').val($(raw.filter('#album-desc').get(0)).html());
+    wysihtml5Load(true);
+    var reqs = {};
+    $($(raw.filter('#album-images').get(0)).find('img')).each(function() {
+      reqs[$(this).attr('data-id')] = {'action': 'read'};
+    });
+    $.post('{% url imginfo %}', JSON.stringify(reqs), function(data) {
+      var resp = JSON.parse(data);
+      for (idx in resp) {
+        var info = resp[idx];
+        if (info.status) {
+          var imgtag = $('<img />');
+          imgtag.attr('src', info['thumb_url']);
+          imgtag.attr('alt', info['desc']);
+          imgtag.appendTo('#id_images');
+        } else {
+          alert('Get image (ID' + idx +') info failed: ' + info['msg']);
+        }
+      }
+    });
     $('#id_uploadimg').css('display', '');
+
+    /* handling upload files */
     $('#id_uploadimg input').change(function() {
       $(this.files).map(function() {
         console.info(this);
