@@ -40,15 +40,15 @@
     <tr><td>
       <div><textarea name="body_raw" id="id_body_raw" rows=30 placeholder="Content of your blog">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea></div>
       <div id="id_uploadimg" style="display:none">
-        <input type="file" multiple />
         <div id="id_images">
           <div class="image" style="display:none">
-            <img src="#" alt=""/>
+            <img />
             <div class="progress progress-strip active">
               <div class="bar" style="width: 0%"></div>
             </div>
           </div>
         </div>
+        <input type="file" multiple />
       </div>
     </td><tr>
     <tr><td>
@@ -167,8 +167,9 @@ function albumLoad(load) {
           /* display upload file */
           var reader = new FileReader();
           var imgdiv = $('#id_uploadimg .image:first-child').clone();
+          var imgtag = $(imgdiv.find('img')[0]);
           reader.onload = function(e) {
-            var imgtag = $(imgdiv.find('img')[0]);
+            imgtag = $(imgdiv.find('img')[0]);
             imgtag.attr('src', e.target.result);
             imgtag.attr('alt', this.name);
             imgdiv.css('display', '');
@@ -178,17 +179,25 @@ function albumLoad(load) {
 
           /* upload file */
           var xhr = new XMLHttpRequest();
-          function updateProgress(e) {
-            var bar = $(imgdiv.find('.progress .bar')[0]);
-            var percentage = Math.floor((e.loaded/e.total*1000)/10) + '%';
-            bar.css('width', percentage);
-          }
+          xhr.fname = this.name;
           if (xhr.upload) {
-            xhr.upload.onprogress = updateProgress;
+            xhr.upload.onprogress = function (e) {
+              var bar = $(imgdiv.find('.progress .bar')[0]);
+              var percentage = Math.floor((e.loaded/e.total*1000)/10) + '%';
+              bar.css('width', percentage);
+            };
           }
+          xhr.onloadend = function(e) {
+            if (xhr.status == 200) { /* ajax success */
+              resp = JSON.parse(xhr.response)[xhr.fname];
+              if (resp['status']) { /* upload success */
+                imgtag.attr('data-id', resp['idx']);
+              }
+            }
+          };
           xhr.open('post', '{% url uploadimg %}', true);
           var fd = new FormData;
-          fd.append(this.name, this);
+          fd.append(xhr.fname, this);
           xhr.send(fd);
         } else {
           alert(this.name + " is not an image file.");
