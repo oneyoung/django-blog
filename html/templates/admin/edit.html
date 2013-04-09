@@ -143,6 +143,25 @@ $("#id_form_post").submit(function () {
   $(this).find('input[name="tags"]').each(function () {
     $(this).val(JSON.stringify($.extend(true, [], tags)));
   });
+  if ($('input:radio[name="raw_format"]:checked').val() == 'album') {
+    /* update image info before submit */
+    var reqs = {};
+    $('#id_images .image:visible').each(function () {
+      var idx = $($(this).find('img')[0]).attr('data-id');
+      var desc = $($(this).find('textarea')[0]).val();
+      reqs[idx] = {'action': 'write', 'desc': desc};
+    });
+    $.post('{% url imginfo %}', JSON.stringify(reqs), function(data) {
+      var resp = JSON.parse(data);
+      for (var idx in resp) {
+        var result = resp[idx];
+        if (!result.status) {
+          console.info('img ' + idx + ' fail, msg: ' + result.msg);
+        }
+      }
+    });
+    return false; /* FIXME */
+  }
   return true;
 });
 
@@ -174,19 +193,20 @@ function albumLoad(load) {
     });
     $.post('{% url imginfo %}', JSON.stringify(reqs), function(data) {
       var resp = JSON.parse(data);
-      for (idx in resp) {
+      for (var idx in resp) {
         var info = resp[idx];
         if (info.status) {
           var imgdiv = $('#id_uploadimg .image:first-child').clone();
           var imgtag = $(imgdiv.find('img')[0]);
-          imgtag.attr('src', info['thumb_url']);
-          imgtag.attr('alt', info['desc']);
-          $(imgdiv.find('textarea')[0]).val(info['desc']);
+          imgtag.attr('data-id', idx);
+          imgtag.attr('src', info.thumb_url);
+          imgtag.attr('alt', info.desc);
+          $(imgdiv.find('textarea')[0]).val(info.desc);
           imgdiv.css('display', '');
           $(imgdiv.find('.progress')[0]).css('display', 'none');
           imgdiv.appendTo('#id_images');
         } else {
-          alert('Get image (ID' + idx +') info failed: ' + info['msg']);
+          alert('Get image (ID' + idx +') info failed: ' + info.msg);
         }
       }
     });
