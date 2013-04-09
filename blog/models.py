@@ -73,9 +73,10 @@ class Blog(models.Model):
 
                 divcover = soup.new_tag('div', id='album-cover')
                 coverid = images.get('data-cover')
-                coverimg = images.find(lambda tag: tag.get('data-id') == coverid)
-                import copy
-                divcover.append(copy.deepcopy(coverimg))
+                if coverid:
+                    coverimg = images.find(lambda tag: tag.get('data-id') == coverid)
+                    import copy
+                    divcover.append(copy.deepcopy(coverimg))
 
                 return '\n'.join(map(lambda div: div.prettify(),
                                      [divcover, desc, images]))
