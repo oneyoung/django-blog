@@ -147,20 +147,37 @@ $("#id_form_post").submit(function () {
     /* update image info before submit */
     var reqs = {};
     $('#id_images .image:visible').each(function () {
-      var idx = $($(this).find('img')[0]).attr('data-id');
-      var desc = $($(this).find('textarea')[0]).val();
+      var idx = $($(this).find('img')).attr('data-id');
+      var desc = $($(this).find('textarea')).val();
       reqs[idx] = {'action': 'write', 'desc': desc};
     });
-    $.post('{% url imginfo %}', JSON.stringify(reqs), function(data) {
-      var resp = JSON.parse(data);
-      for (var idx in resp) {
-        var result = resp[idx];
-        if (!result.status) {
-          console.info('img ' + idx + ' fail, msg: ' + result.msg);
+    $.ajax({
+      type: 'POST',
+      url: '{% url imginfo %}',
+      data: JSON.stringify(reqs),
+      success: function(data) {
+        var resp = JSON.parse(data);
+        for (var idx in resp) {
+          var result = resp[idx];
+          if (!result.status) {
+            console.info('img ' + idx + ' fail, msg: ' + result.msg);
+          }
         }
-      }
+      },
+      async: false, /* recv response before submit */
     });
-    return false; /* FIXME */
+
+    /* repack body_raw */
+    wysihtml5Load(false);
+    var body_raw = $('#id_body_raw');
+    var divdesc = '<div id="album-desc">' + body_raw.val() + '</div>';
+    var divimgs = '<div id="album-images">';  /* FIXME: add cover id */
+    $('#id_images img:visible').each(function () {
+      $(this).attr('src', '');
+      divimgs += $(this).prop('outerHTML');
+    });
+    divimgs += '</div>';
+    body_raw.val(divdesc + divimgs);
   }
   return true;
 });
@@ -185,10 +202,10 @@ function albumLoad(load) {
   if (load) {
     /* load raw and convert */
     raw = $($('#id_body_raw').val());
-    $('#id_body_raw').val($(raw.filter('#album-desc').get(0)).html());
+    $('#id_body_raw').val($(raw.filter('#album-desc')).html());
     wysihtml5Load(true);
     var reqs = {};
-    $($(raw.filter('#album-images').get(0)).find('img')).each(function() {
+    $($(raw.filter('#album-images')).find('img')).each(function() {
       reqs[$(this).attr('data-id')] = {'action': 'read'};
     });
     $.post('{% url imginfo %}', JSON.stringify(reqs), function(data) {
@@ -197,13 +214,13 @@ function albumLoad(load) {
         var info = resp[idx];
         if (info.status) {
           var imgdiv = $('#id_uploadimg .image:first-child').clone();
-          var imgtag = $(imgdiv.find('img')[0]);
+          var imgtag = $(imgdiv.find('img'));
           imgtag.attr('data-id', idx);
           imgtag.attr('src', info.thumb_url);
           imgtag.attr('alt', info.desc);
-          $(imgdiv.find('textarea')[0]).val(info.desc);
+          $(imgdiv.find('textarea')).val(info.desc);
           imgdiv.css('display', '');
-          $(imgdiv.find('.progress')[0]).css('display', 'none');
+          $(imgdiv.find('.progress')).css('display', 'none');
           imgdiv.appendTo('#id_images');
         } else {
           alert('Get image (ID' + idx +') info failed: ' + info.msg);
@@ -215,15 +232,14 @@ function albumLoad(load) {
     /* handling upload files */
     $('#id_uploadimg input').change(function() {
       $(this.files).map(function() {
-        console.info(this);
         var type = /image\/.*/i;
         if (type.test(this.type)) {
           /* display upload file */
           var reader = new FileReader();
           var imgdiv = $('#id_uploadimg .image:first-child').clone();
-          var imgtag = $(imgdiv.find('img')[0]);
+          var imgtag = $(imgdiv.find('img'));
           reader.onload = function(e) {
-            imgtag = $(imgdiv.find('img')[0]);
+            imgtag = $(imgdiv.find('img'));
             imgtag.attr('src', e.target.result);
             imgtag.attr('alt', this.name);
             imgdiv.css('display', '');
@@ -236,7 +252,7 @@ function albumLoad(load) {
           xhr.fname = this.name;
           if (xhr.upload) {
             xhr.upload.onprogress = function (e) {
-              var bar = $(imgdiv.find('.progress .bar')[0]);
+              var bar = $(imgdiv.find('.progress .bar'));
               var percentage = Math.floor((e.loaded/e.total*1000)/10) + '%';
               bar.css('width', percentage);
             };
