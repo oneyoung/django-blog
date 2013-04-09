@@ -24,6 +24,7 @@
 
 .image img {
   height: 100px;
+  width: auto;
 }
 
 </style>
@@ -40,14 +41,19 @@
     <tr><td>
       <div><textarea name="body_raw" id="id_body_raw" rows=30 placeholder="Content of your blog">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea></div>
       <div id="id_uploadimg" style="display:none">
-        <div id="id_images">
-          <div class="image" style="display:none">
-            <img />
-            <div class="progress progress-strip active">
-              <div class="bar" style="width: 0%"></div>
-            </div>
-          </div>
-        </div>
+        <table id="id_images">
+          <tr class="image" style="display:none">
+            <td><img /></td>
+            <td>
+              <div>
+                <textarea></textarea>
+              </div>
+              <div class="progress progress-strip active">
+                <div class="bar" style="width: 0%"></div>
+              </div>
+            </td>
+          </tr>
+        </table>
         <input type="file" multiple />
       </div>
     </td><tr>
@@ -171,10 +177,14 @@ function albumLoad(load) {
       for (idx in resp) {
         var info = resp[idx];
         if (info.status) {
-          var imgtag = $('<img />');
+          var imgdiv = $('#id_uploadimg .image:first-child').clone();
+          var imgtag = $(imgdiv.find('img')[0]);
           imgtag.attr('src', info['thumb_url']);
           imgtag.attr('alt', info['desc']);
-          imgtag.appendTo('#id_images');
+          $(imgdiv.find('textarea')[0]).val(info['desc']);
+          imgdiv.css('display', '');
+          $(imgdiv.find('.progress')[0]).css('display', 'none');
+          imgdiv.appendTo('#id_images');
         } else {
           alert('Get image (ID' + idx +') info failed: ' + info['msg']);
         }
