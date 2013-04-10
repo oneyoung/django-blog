@@ -62,17 +62,19 @@ class Blog(models.Model):
                 soup = BeautifulSoup(raw)
                 desc = soup.find(id='album-desc')
 
-                images = soup.find(id='album-images')
-                for imgtag in images.find_all(['img']):
+                images_orig = soup.find(id='album-images')
+                coverid = images_orig.get('data-cover')
+                images = soup.new_tag('div', id='album-cover')
+                for imgtag in images_orig.find_all(['img']):
                     idx = imgtag.get('data-id')
                     img = Image.objects.get(idx=idx)
                     self.image_set.add(img)
                     imgtag['src'] = img.thumb_url
                     imgtag['alt'] = img.desc if img.desc else ''
                     imgtag['data-src'] = img.img_url
+                    images.append(imgtag)
 
                 divcover = soup.new_tag('div', id='album-cover')
-                coverid = images.get('data-cover')
                 if coverid:
                     coverimg = images.find(lambda tag: tag.get('data-id') == coverid)
                     import copy
