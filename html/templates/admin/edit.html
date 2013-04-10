@@ -43,6 +43,7 @@
       <div id="id_uploadimg" style="display:none">
         <table id="id_images">
           <tr class="image" style="display:none">
+            <td><input type="radio" name="cover-id" value="COVER_ID" /></td>
             <td><img /></td>
             <td>
               <div>
@@ -171,7 +172,8 @@ $("#id_form_post").submit(function () {
     wysihtml5Load(false);
     var body_raw = $('#id_body_raw');
     var divdesc = '<div id="album-desc">' + body_raw.val() + '</div>';
-    var divimgs = '<div id="album-images">';  /* FIXME: add cover id */
+    var coverid = $('input[name="cover-id"]:checked').val();
+    var divimgs = '<div id="album-images" data-cover="' + coverid + '">';
     $('#id_images img:visible').each(function () {
       $(this).attr('src', '');
       divimgs += $(this).prop('outerHTML');
@@ -206,24 +208,34 @@ function albumLoad(load) {
         $(this).attr('disabled', 'true');
       }
     });
+
     /* load raw and convert */
-    raw = $($('#id_body_raw').val());
-    $('#id_body_raw').val($(raw.filter('#album-desc')).html());
+    var raw = $('<div>' + $('#id_body_raw').val() + '</div>');
+    $('#id_body_raw').val($(raw.find('#album-desc')).html());
     wysihtml5Load(true);
     var reqs = {};
-    $($(raw.filter('#album-images')).find('img')).each(function() {
+    $(raw.find('#album-images img')).each(function() {
       reqs[$(this).attr('data-id')] = {'action': 'read'};
     });
+    var coverid = $(raw.find('#album-images')).attr('data-cover');
     $.post('{% url imginfo %}', JSON.stringify(reqs), function(data) {
       var resp = JSON.parse(data);
       for (var idx in resp) {
         var info = resp[idx];
         if (info.status) {
           var imgdiv = $('#id_uploadimg .image:first-child').clone();
+          /* update img tag */
           var imgtag = $(imgdiv.find('img'));
           imgtag.attr('data-id', idx);
           imgtag.attr('src', info.thumb_url);
           imgtag.attr('alt', info.desc);
+          /* update input:radio (cover-id) */
+          var radio = $(imgdiv.find('input[name="cover-id"]'));
+          radio.val(idx);
+          if (coverid == idx) {
+            radio.attr('checked', 'checked');
+          }
+
           $(imgdiv.find('textarea')).val(info.desc);
           imgdiv.css('display', '');
           $(imgdiv.find('.progress')).css('display', 'none');
@@ -267,7 +279,8 @@ function albumLoad(load) {
             if (xhr.status == 200) { /* ajax success */
               resp = JSON.parse(xhr.response)[xhr.fname];
               if (resp['status']) { /* upload success */
-                imgtag.attr('data-id', resp['idx']);
+                imgtag.attr('data-id', resp.idx);
+                $(imgdiv.find('input[name="cover-id"]')).val(resp.idx);
               }
             }
           };
