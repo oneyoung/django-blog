@@ -42,14 +42,15 @@ lightbox = new Lightbox options
 
 (function() {
   var $, Lightbox, LightboxOptions;
+  var pluginPath = 'static/plugins/lightbox2/';
 
   $ = jQuery;
 
   LightboxOptions = (function() {
 
     function LightboxOptions() {
-      this.fileLoadingImage = 'images/loading.gif';
-      this.fileCloseImage = 'images/close.png';
+      this.fileLoadingImage = pluginPath + 'images/loading.gif';
+      this.fileCloseImage = pluginPath + 'images/close.png';
       this.resizeDuration = 700;
       this.fadeDuration = 500;
       this.labelImage = "Image";
