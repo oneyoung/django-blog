@@ -200,6 +200,12 @@ function wysihtml5Load(load) {
 
 function albumLoad(load) {
   if (load) {
+    /* disable format choice radio */
+    $('input[name="raw_format"]').each(function() {
+      if ($(this).val() != 'album') {
+        $(this).attr('disabled', 'true');
+      }
+    });
     /* load raw and convert */
     raw = $($('#id_body_raw').val());
     $('#id_body_raw').val($(raw.filter('#album-desc')).html());
@@ -289,15 +295,20 @@ $('#id_form_post input:radio').change(function() {
 
   if (type == "album") {
     albumLoad(true);
+  } else {
+    albumLoad(false);
   }
 });
 
 window.onload = function () {
   /* Submit Button */
   $('#id_submit').prepend($('#id_submit_choices button[value="{{ blog.status }}"]').detach());
-  /* bootstrap-wysihtml5 */
-  if ($('#id_form_post input:checked').val() == "html") {
+  var format = $('input[name="raw_format"]:checked').val();
+  if (format == 'html') {
+    /* bootstrap-wysihtml5 */
     wysihtml5Load(true);
+  } else if (format == 'album') {
+    albumLoad(true);
   }
 };
 
