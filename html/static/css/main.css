@@ -29,9 +29,6 @@ html, body {
   background-color: white;
   padding: 30px;
   margin: 30px;
-  zoom: 1;
-  filter: alpha(opacity=93);
-  opacity: 0.93;
 }
 
 .blog-foot {
