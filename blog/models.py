@@ -64,7 +64,7 @@ class Blog(models.Model):
 
                 images_orig = soup.find(id='album-images')
                 coverid = images_orig.get('data-cover')
-                images = soup.new_tag('div', id='album-cover')
+                images = soup.new_tag('div', id='album-images')
                 for imgtag in images_orig.find_all(['img']):
                     idx = imgtag.get('data-id')
                     img = Image.objects.get(idx=idx)
