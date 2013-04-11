@@ -1,18 +1,14 @@
 <!DOCTYPE HTML>
+{% extends "common.html" %}
 {% load static from staticfiles %}
 {% load settings %}
-<html lang="utf-8">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{% block title %} {% get_setting "blog_name" %} {% endblock %}</title>
-  <link href="{% static "css/main.css" %}" rel="stylesheet">
-  <link href="{% static "css/syntax.css" %}" rel="stylesheet">
-  <!-- Bootstrap -->
-  <link href="{% static "plugins/bootstrap/bootstrap.min.css" %}" rel="stylesheet" media="screen">
-  {% block head %}{% endblock %}
-</head>
 
-<body>
+{% block com_head %}
+  <title>{% block title %} {% get_setting "blog_name" %} {% endblock %}</title>
+  {% block head %}{% endblock %}
+{% endblock %}
+
+{% block com_body %}
 <div class="blog-body">
   <div class="blog-head">
     <div class="navbar navbar-inverse blog-navbar">
@@ -58,9 +54,6 @@
   </div>
 </div>
 
-<!-- Bootstrap -->
-<script src="//lib.sinaapp.com/js/jquery/1.8/jquery.min.js"></script>
-<script src="{% static "plugins/bootstrap/bootstrap.min.js" %}"></script>
 {% block script %}
 {% endblock %}
 <!-- Highlight.js -->
@@ -80,5 +73,4 @@
   })();
 
 </script>
-</body>
-</html>
+{% endblock %}
