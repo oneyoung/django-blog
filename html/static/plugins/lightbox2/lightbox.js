@@ -42,7 +42,7 @@ lightbox = new Lightbox options
 
 (function() {
   var $, Lightbox, LightboxOptions;
-  var pluginPath = 'static/plugins/lightbox2/';
+  var pluginPath = '/static/plugins/lightbox2/';
 
   $ = jQuery;
 

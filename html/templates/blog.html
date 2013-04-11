@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load settings %}
+{% load static from staticfiles %}
 
 {% block title %}{{ blog.title }}{% endblock %}
 
@@ -9,6 +10,15 @@
 </style>
 
 <script type="text/javascript">
+  function lightboxfy(img, group) { /* img is jQuery obj */
+    var a = $('<a></a>')
+    a.attr({
+      'href': (img.attr('data-src')? img.attr('data-src'): img.attr('src')),
+      'rel': 'lightbox[' + (group? '[' + group + ']': ''),
+      'title': img.attr('alt'),
+    });
+    img.wrap(a);
+  }
   window.onload = function() {
     $('html body').animate({
       scrollTop: ($('#blog-text').offset().top - 50)
@@ -19,6 +29,21 @@
         scrollTop: $('#disqus_thread').offset().top
       }, 400);
     });
+    if ($('.content:has("img")').length) {
+      loadCSS('{% static "plugins/lightbox2/lightbox.css" %}');
+      $.getScript('{% static "plugins/lightbox2/lightbox.js" %}', function() {
+        if ($('#album-images').length) { /* album */
+          $('#album-cover').remove();
+          $('#album-images img').each(function() {
+            lightboxfy($(this), 'album');
+          });
+        } else {
+          $('.content img').each(function() {
+            lightboxfy($(this));
+          });
+        }
+      });
+    }
   };
 </script>
 {% endblock %}

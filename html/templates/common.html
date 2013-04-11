@@ -6,6 +6,23 @@
   <link href="{% static "css/main.css" %}" rel="stylesheet">
   <link href="{% static "css/syntax.css" %}" rel="stylesheet">
   <script src="//lib.sinaapp.com/js/jquery/1.8/jquery.min.js"></script>
+  <script type="text/javascript">
+    /* loadCSS -- load CSS file dynamically. */
+    function loadCSS(url, callback) { /* if callback given, means sync mode */
+      if (callback) {
+        $.get(url, function() {
+          $('<style type="text/css"></style>')
+                .html(css)
+                .appendTo("head");
+          callback();
+        });
+      } else {
+        /* async load */
+        $('<link rel="stylesheet" type="text/css" href="' + url + '" >')
+          .appendTo("head");
+      }
+    }
+  </script>
   <!-- Bootstrap -->
   <link href="{% static "plugins/bootstrap/bootstrap.min.css" %}" rel="stylesheet" media="screen">
   <script src="{% static "plugins/bootstrap/bootstrap.min.js" %}"></script>
