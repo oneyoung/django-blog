@@ -58,7 +58,7 @@
 {% endblock %}
 <script type="text/javascript">
   /* Highlight.js */
-  loadScript('{% static "plugins/highlight.pack.js" %}', function() {
+  $.getScript('{% static "plugins/highlight.pack.js" %}', function() {
     hljs.initHighlightingOnLoad();
   });
 
