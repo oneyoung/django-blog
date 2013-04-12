@@ -244,19 +244,8 @@ var BinaryAjax = (function() {
 
 }());
 
+/* mark this to avoid page crash */
 /*
-document.write(
-	"<script type='text/vbscript'>\r\n"
-	+ "Function IEBinary_getByteAt(strBinary, iOffset)\r\n"
-	+ "	IEBinary_getByteAt = AscB(MidB(strBinary,iOffset+1,1))\r\n"
-	+ "End Function\r\n"
-	+ "Function IEBinary_getLength(strBinary)\r\n"
-	+ "	IEBinary_getLength = LenB(strBinary)\r\n"
-	+ "End Function\r\n"
-	+ "</script>\r\n"
-);
-*/
-
 document.write(
 	"<script type='text/vbscript'>\r\n"
 	+ "Function IEBinary_getByteAt(strBinary, iOffset)\r\n"
@@ -275,3 +264,4 @@ document.write(
 	+ "End Function\r\n"
 	+ "</script>\r\n"
 );
+*/

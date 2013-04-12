@@ -37,6 +37,8 @@
           $('#album-images img').each(function() {
             lightboxfy($(this), 'album');
           });
+          $.getScript('{% static "plugins/exif-js/binaryajax.js" %}');
+          $.getScript('{% static "plugins/exif-js/exif.js" %}');
         } else {
           $('.content img').each(function() {
             lightboxfy($(this));

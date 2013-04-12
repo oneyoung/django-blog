@@ -128,6 +128,10 @@ lightbox = new Lightbox options
       })), $('<div/>', {
         "class": 'lb-actionContainer'
       }).append($('<a/>', {
+        "class": 'lb-action-exif',
+      }).append($('<img/>', {
+        src: this.options.fileExifImage,
+      })),$('<a/>', {
         "class": 'lb-action-expand',
       }).append($('<img/>', {
         src: this.options.fileExpandImage,
@@ -217,7 +221,7 @@ lightbox = new Lightbox options
       this.sizeOverlay();
       $('#lightboxOverlay').fadeIn(this.options.fadeDuration);
       $('.loader').fadeIn('slow');
-      $lightbox.find('.lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption, .lb-action-download, .lb-action-expand').hide();
+      $lightbox.find('.lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption, .lb-action-download, .lb-action-expand .lb-action-exif').hide();
       $lightbox.find('.lb-outerContainer').addClass('animating');
       preloader = new Image;
       preloader.onload = function() {
@@ -238,6 +242,19 @@ lightbox = new Lightbox options
         }
         return resize(width, height);
       };
+      try {
+        EXIF.getData($image, function() {
+          var _exif = this;
+          console.info("hree");
+          $lightbox.find('.lb-action-exif').show().on('click', function() {
+            var make = EXIF.getTag(_exif, "Make"),
+            model = EXIF.getTag(_exif, "Model");
+            alert("make: " + make + "  Model:" + model);
+          });
+        });
+      } catch(err) {
+        console.info('error: ',  err.message);
+      }
       preloader.src = this.album[imageNumber].link;
       this.currentImageIndex = imageNumber;
     };
