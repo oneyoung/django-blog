@@ -55,7 +55,7 @@ lightbox = new Lightbox options
     function LightboxOptions() {
       this.fileLoadingImage = relPath('images/loading.gif');
       this.fileCloseImage = relPath('images/close.png');
-      this.fileDownloadImage = relPath('images/downlaod.png');
+      this.fileDownloadImage = relPath('images/download.png');
       this.fileExpandImage = relPath('images/expand.png');
       this.fileExifImage = relPath('images/camera.png');
       this.resizeDuration = 700;
@@ -126,9 +126,14 @@ lightbox = new Lightbox options
       }), $('<span/>', {
         "class": 'lb-number'
       })), $('<div/>', {
-        "class": 'lb-closeContainer'
+        "class": 'lb-actionContainer'
       }).append($('<a/>', {
-        "class": 'lb-close'
+        "class": 'lb-action-download',
+        "target": '_blank',
+      }).append($('<img/>', {
+        src: this.options.fileDownloadImage,
+      })), $('<a/>', {
+        "class": 'lb-action-close'
       }).append($('<img/>', {
         src: this.options.fileCloseImage
       }))))))).appendTo($('body'));
@@ -153,7 +158,11 @@ lightbox = new Lightbox options
         _this.changeImage(_this.currentImageIndex + 1);
         return false;
       });
-      $lightbox.find('.lb-loader, .lb-close').on('click', function(e) {
+      $lightbox.find('.lb-loader, .lb-action-download').on('click', function(e) {
+          window.location.href = $(lightbox).find('.lb-image').attr('src');
+          return true;
+      });
+      $lightbox.find('.lb-loader, .lb-action-close').on('click', function(e) {
         _this.end();
         return false;
       });
