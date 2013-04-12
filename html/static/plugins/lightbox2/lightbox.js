@@ -128,6 +128,10 @@ lightbox = new Lightbox options
       })), $('<div/>', {
         "class": 'lb-actionContainer'
       }).append($('<a/>', {
+        "class": 'lb-action-expand',
+      }).append($('<img/>', {
+        src: this.options.fileExpandImage,
+      })),$('<a/>', {
         "class": 'lb-action-download',
         "target": '_blank',
       }).append($('<img/>', {
@@ -213,17 +217,26 @@ lightbox = new Lightbox options
       this.sizeOverlay();
       $('#lightboxOverlay').fadeIn(this.options.fadeDuration);
       $('.loader').fadeIn('slow');
-      $lightbox.find('.lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption').hide();
+      $lightbox.find('.lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption, .lb-action-download, .lb-action-expand').hide();
       $lightbox.find('.lb-outerContainer').addClass('animating');
       preloader = new Image;
       preloader.onload = function() {
         $image.attr('src', _this.album[imageNumber].link);
-        var maxWidth = document.width - 25;
+        function resize(width, height) {
+          $image.width = width;
+          $image.height = height;
+          return _this.sizeContainer(width, height);
+        }
+        var maxWidth = (window.innerWidth || document.body.clientWidth) - 40;
         var width = preloader.width < maxWidth? preloader.width: maxWidth;
         var height = preloader.height*(width/preloader.width);
-        $image.width = width;
-        $image.height = height;
-        return _this.sizeContainer(width, height);
+        if (preloader.width > maxWidth) {
+          $lightbox.find('.lb-action-expand').show().on('click', function() {
+            $(this).hide();
+            resize(preloader.width, preloader.height);
+          });
+        }
+        return resize(width, height);
       };
       preloader.src = this.album[imageNumber].link;
       this.currentImageIndex = imageNumber;
