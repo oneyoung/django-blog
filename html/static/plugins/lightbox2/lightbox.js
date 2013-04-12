@@ -42,15 +42,22 @@ lightbox = new Lightbox options
 
 (function() {
   var $, Lightbox, LightboxOptions;
-  var pluginPath = '/static/plugins/lightbox2/';
+
+  function relPath(path) {
+    var pluginPath = '/static/plugins/lightbox2/';
+    return pluginPath + path;
+  }
 
   $ = jQuery;
 
   LightboxOptions = (function() {
 
     function LightboxOptions() {
-      this.fileLoadingImage = pluginPath + 'images/loading.gif';
-      this.fileCloseImage = pluginPath + 'images/close.png';
+      this.fileLoadingImage = relPath('images/loading.gif');
+      this.fileCloseImage = relPath('images/close.png');
+      this.fileDownloadImage = relPath('images/downlaod.png');
+      this.fileExpandImage = relPath('images/expand.png');
+      this.fileExifImage = relPath('images/camera.png');
       this.resizeDuration = 700;
       this.fadeDuration = 500;
       this.labelImage = "Image";
