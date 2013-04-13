@@ -44,18 +44,56 @@ class Blog(models.Model):
         return self.title
 
     def save(self, **kwargs):
-        if not self.id:  # new object here
-            slug = self.title.replace(' ', '-')
+        def alloc_slug(title):
+            slug = title.replace(' ', '-')
             if Blog.objects.filter(slug=slug):  # found slug conflict
                 slug = slug + datetime.now().strftime("_%y%m%d-%H%M%S")
-            self.slug = slug
+            return slug
 
-        if self.raw_format == 'md':
-            import markdown
-            md = markdown.Markdown(extensions=['fenced_code'])
-            self.body_html = md.convert(self.body_raw)
-        elif self.raw_format == 'html':
-            self.body_html = self.body_raw
+        def raw2html(raw, type):
+            def md2html(raw):
+                import markdown
+                md = markdown.Markdown(extensions=['fenced_code'])
+                return md.convert(raw)
+
+            def album2html(raw):
+                from bs4 import BeautifulSoup
+
+                soup = BeautifulSoup(raw)
+                desc = soup.find(id='album-desc')
+
+                images_orig = soup.find(id='album-images')
+                coverid = images_orig.get('data-cover')
+                images = soup.new_tag('div', id='album-images')
+                for imgtag in images_orig.find_all(['img']):
+                    idx = imgtag.get('data-id')
+                    img = Image.objects.get(idx=idx)
+                    self.image_set.add(img)
+                    imgtag['src'] = img.thumb_url
+                    imgtag['alt'] = img.desc if img.desc else ''
+                    imgtag['data-src'] = img.img_url
+                    images.append(imgtag)
+
+                divcover = soup.new_tag('div', id='album-cover')
+                if coverid:
+                    coverimg = images.find(lambda tag: tag.get('data-id') == coverid)
+                    import copy
+                    divcover.append(copy.deepcopy(coverimg))
+
+                return '\n'.join(map(lambda div: div.prettify(),
+                                     [divcover, desc, images]))
+
+            if type == 'md':
+                html = md2html(raw)
+            elif type == 'html':
+                html = raw
+            elif type == 'album':
+                html = album2html(raw)
+            return html
+
+        if not self.id:  # new object here
+            self.slug = alloc_slug(self.title)
+        self.body_html = raw2html(self.body_raw, self.raw_format)
 
         self.full_clean()
         models.Model.save(self, **kwargs)
@@ -91,7 +129,7 @@ class Image(models.Model):
     status = models.CharField(max_length=15, default='')
     active = models.BooleanField(default=True)
 
-    blogs = models.ForeignKey(Blog, blank=True, null=True)
+    blog = models.ForeignKey(Blog, blank=True, null=True)
 
     def _get_img_url(self):
         return self._img_url if self._img_url else self.img.url

@@ -73,9 +73,8 @@ class UploadImageView(FormView):
                 result[fname] = {
                     'status': True,
                     'idx': image.idx,
-                    'url': image.img_url,
-                    'thumb': image.thumb_url,
-                    'msg': 'OK',
+                    'img_url': image.img_url,
+                    'thumb_url': image.thumb_url,
                 }
             except Exception, e:
                 result[fname] = {
@@ -83,6 +82,41 @@ class UploadImageView(FormView):
                     'msg': str(e),
                 }
         return http.HttpResponse(json.dumps(result))
+
+
+@check_permission
+class ImageInfoView(FormView):
+    def post(self, request, *args, **kwargs):
+        reqs = json.loads(request.read())
+        response = {}
+        for idx in reqs:
+            req = reqs[idx]
+            try:
+                if req.get('action') == 'read':
+                    img = Image.objects.get(idx=idx)
+                    result = {
+                        'status': True,
+                        'img_url': img.img_url,
+                        'thumb_url': img.thumb_url,
+                        'desc': img.desc,
+                    }
+                elif req.get('action') == 'write':
+                    img = Image.objects.get(idx=idx)
+                    img.desc = req.get('desc')
+                    img.save()
+                    result = {'status': True}
+                else:
+                    result = {
+                        'status': False,
+                        'msg': 'wrong action code, should be "read" or "write"'
+                    }
+            except Exception, e:
+                result = {
+                    'status': False,
+                    'msg': str(e),
+                }
+            response[idx] = result
+        return http.HttpResponse(json.dumps(response))
 
 
 @check_permission

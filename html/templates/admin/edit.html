@@ -21,6 +21,12 @@
 #id_table_tag td {
   width: 50%;
 }
+
+.image img {
+  height: 100px;
+  width: auto;
+}
+
 </style>
 {% endblock %}
 
@@ -34,6 +40,23 @@
     </td><tr>
     <tr><td>
       <div><textarea name="body_raw" id="id_body_raw" rows=30 placeholder="Content of your blog">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea></div>
+      <div id="id_uploadimg" style="display:none">
+        <table id="id_images">
+          <tr class="image" style="display:none">
+            <td><input type="radio" name="cover-id" value="COVER_ID" /></td>
+            <td><img /></td>
+            <td>
+              <div>
+                <textarea></textarea>
+              </div>
+              <div class="progress progress-strip active">
+                <div class="bar" style="width: 0%"></div>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <input type="file" multiple />
+      </div>
     </td><tr>
     <tr><td>
       {% for format in blog.RAW_FORMAT_CHOICES %}
@@ -121,6 +144,43 @@ $("#id_form_post").submit(function () {
   $(this).find('input[name="tags"]').each(function () {
     $(this).val(JSON.stringify($.extend(true, [], tags)));
   });
+  if ($('input:radio[name="raw_format"]:checked').val() == 'album') {
+    /* update image info before submit */
+    var reqs = {};
+    $('#id_images .image:visible').each(function () {
+      var idx = $($(this).find('img')).attr('data-id');
+      var desc = $($(this).find('textarea')).val();
+      reqs[idx] = {'action': 'write', 'desc': desc};
+    });
+    $.ajax({
+      type: 'POST',
+      url: '{% url imginfo %}',
+      data: JSON.stringify(reqs),
+      success: function(data) {
+        var resp = JSON.parse(data);
+        for (var idx in resp) {
+          var result = resp[idx];
+          if (!result.status) {
+            console.info('img ' + idx + ' fail, msg: ' + result.msg);
+          }
+        }
+      },
+      async: false, /* recv response before submit */
+    });
+
+    /* repack body_raw */
+    wysihtml5Load(false);
+    var body_raw = $('#id_body_raw');
+    var divdesc = '<div id="album-desc">' + body_raw.val() + '</div>';
+    var coverid = $('input[name="cover-id"]:checked').val();
+    var divimgs = '<div id="album-images" data-cover="' + coverid + '">';
+    $('#id_images img:visible').each(function () {
+      $(this).attr('src', '');
+      divimgs += $(this).prop('outerHTML');
+    });
+    divimgs += '</div>';
+    body_raw.val(divdesc + divimgs);
+  }
   return true;
 });
 
@@ -140,6 +200,104 @@ function wysihtml5Load(load) {
   }
 }
 
+function albumLoad(load) {
+  if (load) {
+    /* disable format choice radio */
+    $('input[name="raw_format"]').each(function() {
+      if ($(this).val() != 'album') {
+        $(this).attr('disabled', 'true');
+      }
+    });
+
+    /* load raw and convert */
+    var raw = $('<div>' + $('#id_body_raw').val() + '</div>');
+    $('#id_body_raw').val($(raw.find('#album-desc')).html());
+    wysihtml5Load(true);
+    var reqs = {};
+    $(raw.find('#album-images img')).each(function() {
+      reqs[$(this).attr('data-id')] = {'action': 'read'};
+    });
+    var coverid = $(raw.find('#album-images')).attr('data-cover');
+    $.post('{% url imginfo %}', JSON.stringify(reqs), function(data) {
+      var resp = JSON.parse(data);
+      for (var idx in resp) {
+        var info = resp[idx];
+        if (info.status) {
+          var imgdiv = $('#id_uploadimg .image:first-child').clone();
+          /* update img tag */
+          var imgtag = $(imgdiv.find('img'));
+          imgtag.attr('data-id', idx);
+          imgtag.attr('src', info.thumb_url);
+          imgtag.attr('alt', info.desc);
+          /* update input:radio (cover-id) */
+          var radio = $(imgdiv.find('input[name="cover-id"]'));
+          radio.val(idx);
+          if (coverid == idx) {
+            radio.attr('checked', 'checked');
+          }
+
+          $(imgdiv.find('textarea')).val(info.desc);
+          imgdiv.css('display', '');
+          $(imgdiv.find('.progress')).css('display', 'none');
+          imgdiv.appendTo('#id_images');
+        } else {
+          alert('Get image (ID' + idx +') info failed: ' + info.msg);
+        }
+      }
+    });
+    $('#id_uploadimg').css('display', '');
+
+    /* handling upload files */
+    $('#id_uploadimg input').change(function() {
+      $(this.files).map(function() {
+        var type = /image\/.*/i;
+        if (type.test(this.type)) {
+          /* display upload file */
+          var reader = new FileReader();
+          var imgdiv = $('#id_uploadimg .image:first-child').clone();
+          var imgtag = $(imgdiv.find('img'));
+          reader.onload = function(e) {
+            imgtag = $(imgdiv.find('img'));
+            imgtag.attr('src', e.target.result);
+            imgtag.attr('alt', this.name);
+            imgdiv.css('display', '');
+            imgdiv.appendTo('#id_images');
+          };
+          reader.readAsDataURL(this);
+
+          /* upload file */
+          var xhr = new XMLHttpRequest();
+          xhr.fname = this.name;
+          if (xhr.upload) {
+            xhr.upload.onprogress = function (e) {
+              var bar = $(imgdiv.find('.progress .bar'));
+              var percentage = Math.floor((e.loaded/e.total*1000)/10) + '%';
+              bar.css('width', percentage);
+            };
+          }
+          xhr.onloadend = function(e) {
+            if (xhr.status == 200) { /* ajax success */
+              resp = JSON.parse(xhr.response)[xhr.fname];
+              if (resp['status']) { /* upload success */
+                imgtag.attr('data-id', resp.idx);
+                $(imgdiv.find('input[name="cover-id"]')).val(resp.idx);
+              }
+            }
+          };
+          xhr.open('post', '{% url uploadimg %}', true);
+          var fd = new FormData;
+          fd.append(xhr.fname, this);
+          xhr.send(fd);
+        } else {
+          alert(this.name + " is not an image file.");
+        }
+      });
+    })
+  } else {
+    $('#id_uploadimg').css('display', 'none');
+  }
+}
+
 $('#id_form_post input:radio').change(function() {
   var type = $(this).val();
   if (type == "html") {
@@ -147,14 +305,23 @@ $('#id_form_post input:radio').change(function() {
   } else {
     wysihtml5Load(false);
   }
+
+  if (type == "album") {
+    albumLoad(true);
+  } else {
+    albumLoad(false);
+  }
 });
 
 window.onload = function () {
   /* Submit Button */
   $('#id_submit').prepend($('#id_submit_choices button[value="{{ blog.status }}"]').detach());
-  /* bootstrap-wysihtml5 */
-  if ($('#id_form_post input:checked').val() == "html") {
+  var format = $('input[name="raw_format"]:checked').val();
+  if (format == 'html') {
+    /* bootstrap-wysihtml5 */
     wysihtml5Load(true);
+  } else if (format == 'album') {
+    albumLoad(true);
   }
 };
 

@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^admin/edit/$', views.EditView.as_view(), name='edit'),
     url(r'^admin/settings/$', views.SettingsView.as_view(), name='settings'),
     url(r'^admin/uploadimg/$', views.UploadImageView.as_view(), name='uploadimg'),
+    url(r'^admin/imginfo/$', views.ImageInfoView.as_view(), name='imginfo'),
     url(r'^archive/tag/(?P<tag>.+)/$',
         views.BlogListView.as_view(), name='tag'),
     url(r'^archive/date/(?P<year>\d{4})(?P<month>\d{2})/$',
@@ -30,3 +31,11 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 )
+
+from blogsite import settings
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^media/(?P<path>.*)$',
+            'django.views.static.serve',
+            {'document_root': settings.MEDIA_ROOT, }),
+    )
