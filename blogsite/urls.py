@@ -33,7 +33,7 @@ urlpatterns = patterns('',
 )
 
 from blogsite import settings
-if settings.DEBUG:
+if hasattr(settings, 'DEBUG') and settings.DEBUG:
     urlpatterns += patterns('',
         url(r'^media/(?P<path>.*)$',
             'django.views.static.serve',
