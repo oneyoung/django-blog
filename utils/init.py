@@ -17,6 +17,7 @@ check_moudle('markdown')
 check_moudle('bootstrap_toolkit', 'django-bootstrap-toolkit')
 check_moudle('PIL', 'pil')
 check_moudle('bs4', 'beautifulsoup')
+check_moudle('requests', 'requests')
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 
