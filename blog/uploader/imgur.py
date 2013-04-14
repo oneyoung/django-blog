@@ -25,11 +25,12 @@ def upload(image):  # image could be 'path' , 'file' or 'image data'
     if result.get('status'):
         link = result.get('data').get('link')
         base, ext = os.path.splitext(link)
-        return {
-            'origin': link,
-            'small': base + 's' + ext,
-            'large': base + 'l' + ext,
-        }
+        return (link, base + 'l' + ext)
+        #return {
+        #    'origin': link,
+        #    'small': base + 's' + ext,
+        #    'large': base + 'l' + ext,
+        #}
 
 
 if __name__ == "__main__":
