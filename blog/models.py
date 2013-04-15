@@ -126,7 +126,13 @@ class Image(models.Model):
 
     desc = models.TextField(blank=True, null=True)
 
-    status = models.CharField(max_length=15, default='')
+    STATUS_CHOICES = (
+        ('created', 'obj has been just created'),
+        ('uploaded', 'image has been uploaded'),
+        ('updated', 'related blog has been updated'),
+        ('invalid', 'url is invalid'),
+    )
+    status = models.CharField(max_length=15, default='created')
     active = models.BooleanField(default=True)
 
     blog = models.ForeignKey(Blog, blank=True, null=True)
