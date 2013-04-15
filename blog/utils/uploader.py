@@ -1,5 +1,7 @@
 import logging
 import Queue
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from blog.models import Blog, Image
 from imgur import upload
 
@@ -18,6 +20,7 @@ class Uploader():
             try:
                 image = self.Q.get(block=True, timeout=10)
                 logger.debug("queue get " + str(image))
+                print("queue get " + str(image))
                 try:
                     if image.status != 'uploaded':
                         img_url, thumb_url = upload(image.img.read())
@@ -40,7 +43,7 @@ class Uploader():
                         logger.exception("blog[%s] update fail" % blog_id)
                 break
 
-    def _queue(self, obj):
+    def queue(self, obj):
         if not self.th.is_alive():
             self.th.start()
         logger.debug("queue put " + str(obj))
@@ -48,16 +51,20 @@ class Uploader():
 
     def _scan(self):
         for image in Image.objects.exclude(status='updated').exclude(blog=None):
-            self._queue(image)
+            self.queue(image)
 
     def start(self):
-        from django.db.models.signals import post_save
-        from django.dispatch import receiver
-
-        @receiver(post_save, sender=Image)
-        def handler(sender, **kwargs):
-            if kwargs.get('created'):
-                image = kwargs.get('instance')
-                self._queue(image)
-
         self._scan()
+
+uploader = Uploader()
+
+
+@receiver(post_save, sender=Image)
+def handler(sender, **kwargs):
+    if kwargs.get('created'):
+        image = kwargs.get('instance')
+        uploader.queue(image)
+
+
+def start():
+    uploader.start()

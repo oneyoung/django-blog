@@ -27,6 +27,5 @@ application = get_wsgi_application()
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
 
-from blog.utils.uploader import Uploader
-uploader = Uploader()
+from blog.utils import uploader
 uploader.start()
