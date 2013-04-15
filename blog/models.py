@@ -137,6 +137,9 @@ class Image(models.Model):
 
     blog = models.ForeignKey(Blog, blank=True, null=True)
 
+    def __unicode__(self):
+        return self.idx
+
     def _get_img_url(self):
         return self._img_url if self._img_url else self.img.url
 

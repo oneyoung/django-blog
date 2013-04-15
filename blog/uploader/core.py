@@ -17,6 +17,7 @@ class Uploader():
         while 1:
             try:
                 image = self.Q.get(block=True, timeout=10)
+                logger.debug("queue get " + repr(image))
                 try:
                     img_url, thumb_url = upload(image.img.read())
                     # use update specified fields to avoid concurrency issue
@@ -41,9 +42,14 @@ class Uploader():
     def _queue(self, obj):
         if not self.th.is_alive():
             self.th.start()
+        logger.debug("queue put " + repr(obj))
         self.Q.put(obj)
 
-    def daemon(self):
+    def _scan(self):
+        for image in Image.objects.exclude(status='updated').execlude(blog=None):
+            self._queue(image)
+
+    def start(self):
         from django.db.models.signals import post_save
         from django.dispatch import receiver
 
@@ -51,3 +57,5 @@ class Uploader():
         def handler(sender, **kwargs):
             image = kwargs.get('instance')
             self._queue(image)
+
+        self._scan()
