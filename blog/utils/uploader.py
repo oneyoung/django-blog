@@ -20,7 +20,6 @@ class Uploader():
             try:
                 image = self.Q.get(block=True, timeout=10)
                 logger.debug("queue get " + str(image))
-                print("queue get " + str(image))
                 try:
                     if image.status != 'uploaded':
                         img_url, thumb_url = upload(image.img.read())
@@ -38,7 +37,7 @@ class Uploader():
                     try:
                         blog = Blog.objects.get(pk=blog_id)
                         blog.save()
-                        blog.image_set.update(status='updated')
+                        blog.image_set.filter(status='uploaded').update(status='updated')
                     except:
                         logger.exception("blog[%s] update fail" % blog_id)
                 break
