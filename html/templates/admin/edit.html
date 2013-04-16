@@ -285,6 +285,7 @@ function albumLoad(load) {
             }
           };
           xhr.open('post', '{% url uploadimg %}', true);
+          setCsrfToken(xhr);
           var fd = new FormData;
           fd.append(xhr.fname, this);
           xhr.send(fd);
