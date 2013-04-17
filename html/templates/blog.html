@@ -7,6 +7,7 @@
 {% block head %}
 <style>
   hr { margin-top: 0.5em }
+  #album-cover { display: none}
 </style>
 
 <script type="text/javascript">
@@ -38,7 +39,6 @@
       loadCSS('{% static "plugins/lightbox2/lightbox.css" %}');
       $.getScript('{% static "plugins/lightbox2/lightbox.js" %}', function() {
         if ($('#album-images').length) { /* album */
-          $('#album-cover').remove();
           $.getScript('{% static "plugins/jquery.masonry.min.js" %}', function() {
             $('#album-images img').each(function() {
               masonryfy(this);
