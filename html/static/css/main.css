@@ -55,3 +55,9 @@ html, body {
   padding: 0.5em;
   text-align: center;
 }
+
+.item {
+  float: left;
+  margin: 5px;
+  width: 200px;
+}
