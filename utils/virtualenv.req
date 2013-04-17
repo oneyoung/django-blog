@@ -1,0 +1,8 @@
+BeautifulSoup==3.2.1
+Django==1.4.2
+Markdown==2.3.1
+PIL==1.1.7
+django-bootstrap-toolkit==2.11.0
+django-evolution==0.6.9
+requests==1.2.0
+wsgiref==0.1.2

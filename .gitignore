@@ -6,3 +6,4 @@
 db/
 media/
 blogsite/config.py
+virtualenv/
