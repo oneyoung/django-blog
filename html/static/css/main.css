@@ -59,7 +59,6 @@ html, body {
 .item {
   float: left;
   margin: 5px;
-  width: 200px;
 }
 
 #album-images img {

@@ -30,20 +30,31 @@
     $.fn.masonryFy = function(options) {
       var settings = $.extend({
         'column': 3,
-        'selector': 'item',
+        'selector': '.item',
       }, options);
 
+      var _this = this;
       this.find('img').each(function () {
-        var div = $('<div class="' + settings.selector + '"></div>');
+        var div = $('<div class="' + settings.selector.substr(1) + '"></div>');
         $(this).wrap(div);
         return div;
       });
 
-      var _this = this;
+      function resizeImage(cloumn) {
+        var selector = _this.find(settings.selector);
+        var marginWidth = selector.outerWidth(true) - selector.width();
+        var width = _this.width()/settings.column - marginWidth - 2;
+        selector.each(function () {
+          $(this).width(width);
+        });
+      }
+
+      resizeImage();
+      $(window).resize(resizeImage);
+
       this.imagesLoaded(function(){
         _this.masonry({
-          itemSelector: '.item',
-          isFitWidth: true,
+          itemSelector: settings.selector,
           isAnimated: true,
           columnWidth: function(containerWidth) {
             return containerWidth/3;
