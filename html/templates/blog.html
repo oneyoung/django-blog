@@ -25,6 +25,36 @@
     $(tag).wrap(div);
     return div;
   }
+
+  (function($) {
+    $.fn.masonryFy = function(options) {
+      var settings = $.extend({
+        'column': 3,
+        'selector': 'item',
+      }, options);
+
+      this.find('img').each(function () {
+        var div = $('<div class="' + settings.selector + '"></div>');
+        $(this).wrap(div);
+        return div;
+      });
+
+      var _this = this;
+      this.imagesLoaded(function(){
+        _this.masonry({
+          itemSelector: '.item',
+          isFitWidth: true,
+          isAnimated: true,
+          columnWidth: function(containerWidth) {
+            return containerWidth/3;
+          },
+        });
+      });
+
+      return this;
+    }
+  })(jQuery);
+
   $(window).load(function() {
     $('html body').animate({
       scrollTop: ($('#blog-text').offset().top - 50)
@@ -40,20 +70,7 @@
       $.getScript('{% static "plugins/lightbox2/lightbox.js" %}', function() {
         if ($('#album-images').length) { /* album */
           $.getScript('{% static "plugins/jquery.masonry.min.js" %}', function() {
-            $('#album-images img').each(function() {
-              masonryfy(this);
-            });
-            var $container = $('#album-images');
-            $container.imagesLoaded(function(){
-              $container.masonry({
-                itemSelector: '.item',
-                isFitWidth: true,
-                isAnimated: true,
-                columnWidth: function(containerWidth) {
-                  return containerWidth/3;
-                },
-              });
-            });
+            $('#album-images').masonryFy();
           });
           $('#album-images img').each(function() {
             lightboxfy($(this), 'album');
