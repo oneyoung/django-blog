@@ -61,3 +61,33 @@ html, body {
   margin: 5px;
   width: 200px;
 }
+
+#album-images img {
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  text-decoration: none;
+}
+
+#album-images img:hover, #album-images img:active {
+  z-index: 1;
+  -webkit-transform: rotate(-3deg) scale(1.2);
+  -moz-transform: rotate(-3deg) scale(1.2);
+  -o-transform: rotate(-3deg) scale(1.2);
+}
+
+#id_list .blog-block {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+#id_list .blog-block:hover, #id_list .blog-block:active{
+  z-index: 1;
+  -webkit-transform: scale(1.03);
+  -moz-transform: scale(1.03);
+  -o-transform: scale(1.03);
+}
