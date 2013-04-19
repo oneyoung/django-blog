@@ -56,20 +56,37 @@ html, body {
   text-align: center;
 }
 
-.item {
-  float: left;
-  margin: 5px;
+#album-images {
+  background: grey;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+  border-radius: 6px;
 }
 
-#album-images img {
+.item {
+  float: left;
+  margin: 3px;
+}
+
+.item img {
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   text-decoration: none;
+  background: white;
+  padding: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
 }
 
-#album-images img:hover, #album-images img:active {
+.item img:hover {
   z-index: 1;
   -webkit-transform: rotate(-3deg) scale(1.2);
   -moz-transform: rotate(-3deg) scale(1.2);
