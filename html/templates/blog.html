@@ -43,7 +43,7 @@
       function resizeImage(cloumn) {
         var selector = _this.find(settings.selector);
         var marginWidth = selector.outerWidth(true) - selector.width();
-        var width = _this.width()/settings.column - marginWidth - 2;
+        var width = _this.width()/settings.column - marginWidth*2;
         selector.each(function () {
           $(this).width(width);
         });
