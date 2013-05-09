@@ -103,6 +103,9 @@ class ImageInfoView(FormView):
                 elif req.get('action') == 'write':
                     Image.objects.filter(idx=idx).update(desc=req.get('desc'))
                     result = {'status': True}
+                elif req.get('action') == 'del':
+                    Image.objects.filter(idx=idx).delete()
+                    result = {'status': True}
                 else:
                     result = {
                         'status': False,

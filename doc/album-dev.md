@@ -39,7 +39,7 @@ request:
 ```
 {
 	"ID1": {
-		'action': 'write'/'read',
+		'action': 'write'/'read'/'del',
 		'desc': IMG_DESC, # requred for write opeartion
 	},
 	"ID2": ...

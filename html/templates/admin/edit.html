@@ -43,6 +43,7 @@
       <div id="id_uploadimg" style="display:none">
         <table id="id_images">
           <tr class="image" style="display:none">
+            <td><a class="delete-image">x</a></td>
             <td><input type="radio" name="cover-id" value="COVER_ID" /></td>
             <td><img /></td>
             <td>
@@ -246,6 +247,18 @@ function albumLoad(load) {
       }
     });
     $('#id_uploadimg').css('display', '');
+    $('#id_uploadimg').delegate('.delete-image', 'click', function() {
+      if (confirm("Are you sure to delete?")) {
+        var parentNode = $($(this).parents('.image'));
+        var id = parentNode.find('img[data-id]').attr('data-id');
+        var reqs = {};
+
+        reqs[id] = {'action': 'del'};
+        $.post('{% url imginfo %}', JSON.stringify(reqs), function(data) {
+          parentNode.remove();
+        });
+      }
+    });
 
     /* handling upload files */
     $('#id_uploadimg input').change(function() {

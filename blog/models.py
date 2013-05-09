@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 
 class Setting(models.Model):
@@ -166,3 +168,14 @@ class Image(models.Model):
         self._thumb_url = url
 
     thumb_url = property(_get_thumb_url, _set_thumb_url)
+
+
+# According django doc, delete() may not be called when
+# doing objects.delete(), so need to register a hanlder
+# to delete related files before Image.delete()
+@receiver(pre_delete, sender=Image)
+def image_delete_handler(sender, **kwargs):
+    image = kwargs.get('instance')
+    for f in [image.img, image.thumb]:
+        if f:
+            f.delete(save=True)
