@@ -19,6 +19,14 @@ class Tag(models.Model):
         return self.name
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 class Blog(models.Model):
     slug = models.SlugField(max_length=255, editable=False, unique=True)
     title = models.CharField(max_length=255)
@@ -41,6 +49,7 @@ class Blog(models.Model):
         ('private', 'Private Only!'),
     )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='public')
+    category = models.ForeignKey(Category, blank=True, null=True)
 
     def __unicode__(self):
         return self.title
