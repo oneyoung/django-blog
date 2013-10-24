@@ -59,7 +59,9 @@
 <script type="text/javascript">
   /* Highlight.js */
   $.getScript('{% static "plugins/highlight.pack.js" %}', function() {
-    hljs.initHighlightingOnLoad();
+    hljs.tabReplace = '    ';  /* tab expand */
+    /* we use <pre><code></code></pre> for code block */
+    $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
   });
 
   /* Google Analytics */
