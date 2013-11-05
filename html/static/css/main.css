@@ -55,3 +55,55 @@ html, body {
   padding: 0.5em;
   text-align: center;
 }
+
+#album-images {
+  background: grey;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 3px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+  border-radius: 6px;
+}
+
+.item {
+  float: left;
+  margin: 3px;
+}
+
+.item img {
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  text-decoration: none;
+  background: white;
+  padding: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.item img:hover {
+  z-index: 1;
+  -webkit-transform: rotate(-3deg) scale(1.2);
+  -moz-transform: rotate(-3deg) scale(1.2);
+  -o-transform: rotate(-3deg) scale(1.2);
+}
+
+#id_list .blog-block {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+#id_list .blog-block:hover, #id_list .blog-block:active{
+  z-index: 1;
+  -webkit-transform: scale(1.03);
+  -moz-transform: scale(1.03);
+  -o-transform: scale(1.03);
+}

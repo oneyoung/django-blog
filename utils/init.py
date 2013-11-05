@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python
 import os
 
 
@@ -9,17 +9,11 @@ def check_moudle(name, package=None):
         __import__(name)
     except ImportError:
         print ("%s not found" % name)
-        print ("run: `easy_install -U %s` to install" % package)
+        print ("run: `pip install %s` to install" % package)
         exit(1)
 
-check_moudle('django_evolution')
-check_moudle('markdown')
-check_moudle('bootstrap_toolkit', 'django-bootstrap-toolkit')
-check_moudle('PIL', 'pil')
-check_moudle('bs4', 'beautifulsoup')
-check_moudle('requests', 'requests')
-
-project_dir = os.path.dirname(os.path.abspath(__file__))
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_dir = os.path.join(script_dir, os.path.pardir)
 
 config = '''
 ADMINS = (

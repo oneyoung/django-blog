@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 
 class Setting(models.Model):
@@ -12,6 +14,14 @@ class Setting(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=255, unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -39,6 +49,7 @@ class Blog(models.Model):
         ('private', 'Private Only!'),
     )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='public')
+    category = models.ForeignKey(Category, blank=True, null=True)
 
     def __unicode__(self):
         return self.title
@@ -66,19 +77,24 @@ class Blog(models.Model):
                 coverid = images_orig.get('data-cover')
                 images = soup.new_tag('div', id='album-images')
                 for imgtag in images_orig.find_all(['img']):
-                    idx = imgtag.get('data-id')
-                    img = Image.objects.get(idx=idx)
-                    self.image_set.add(img)
-                    imgtag['src'] = img.thumb_url
-                    imgtag['alt'] = img.desc if img.desc else ''
-                    imgtag['data-src'] = img.img_url
-                    images.append(imgtag)
+                    try:
+                        idx = imgtag.get('data-id')
+                        img = Image.objects.get(idx=idx)
+                        self.image_set.add(img)
+                        imgtag['src'] = img.thumb_url
+                        imgtag['alt'] = img.desc if img.desc else ''
+                        imgtag['data-src'] = img.img_url
+                        images.append(imgtag)
+                    except:  # ignore illegal img
+                        pass
 
                 divcover = soup.new_tag('div', id='album-cover')
-                if coverid:
+                try:
                     coverimg = images.find(lambda tag: tag.get('data-id') == coverid)
                     import copy
                     divcover.append(copy.deepcopy(coverimg))
+                except:
+                    pass
 
                 return '\n'.join(map(lambda div: div.prettify(),
                                      [divcover, desc, images]))
@@ -126,10 +142,19 @@ class Image(models.Model):
 
     desc = models.TextField(blank=True, null=True)
 
-    status = models.CharField(max_length=15, default='')
+    STATUS_CHOICES = (
+        ('created', 'obj has been just created'),
+        ('uploaded', 'image has been uploaded'),
+        ('updated', 'related blog has been updated'),
+        ('invalid', 'url is invalid'),
+    )
+    status = models.CharField(max_length=15, default='created')
     active = models.BooleanField(default=True)
 
     blog = models.ForeignKey(Blog, blank=True, null=True)
+
+    def __unicode__(self):
+        return str(self.idx)
 
     def _get_img_url(self):
         return self._img_url if self._img_url else self.img.url
@@ -152,3 +177,14 @@ class Image(models.Model):
         self._thumb_url = url
 
     thumb_url = property(_get_thumb_url, _set_thumb_url)
+
+
+# According django doc, delete() may not be called when
+# doing objects.delete(), so need to register a hanlder
+# to delete related files before Image.delete()
+@receiver(pre_delete, sender=Image)
+def image_delete_handler(sender, **kwargs):
+    image = kwargs.get('instance')
+    for f in [image.img, image.thumb]:
+        if f:
+            f.delete(save=True)

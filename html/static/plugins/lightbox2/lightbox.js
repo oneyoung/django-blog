@@ -166,7 +166,7 @@ lightbox = new Lightbox options
         _this.changeImage(_this.currentImageIndex + 1);
         return false;
       });
-      $lightbox.find('.lb-loader, .lb-action-download').on('click', function(e) {
+      $lightbox.find('.lb-action-download').on('click', function(e) {
           window.location.href = $(lightbox).find('.lb-image').attr('src');
           return true;
       });
@@ -220,7 +220,7 @@ lightbox = new Lightbox options
       $image = $lightbox.find('.lb-image');
       this.sizeOverlay();
       $('#lightboxOverlay').fadeIn(this.options.fadeDuration);
-      $('.loader').fadeIn('slow');
+      $('.lb-loader').fadeIn('slow');
       $lightbox.find('.lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption, .lb-action-download, .lb-action-expand .lb-action-exif').hide();
       $lightbox.find('.lb-outerContainer').addClass('animating');
       preloader = new Image;
@@ -232,9 +232,14 @@ lightbox = new Lightbox options
           return _this.sizeContainer(width, height);
         }
         var maxWidth = (window.innerWidth || document.body.clientWidth) - 40;
+        var maxHeight = (window.innerHeight || document.body.clientHeight) - 60;
         var width = preloader.width < maxWidth? preloader.width: maxWidth;
         var height = preloader.height*(width/preloader.width);
-        if (preloader.width > maxWidth) {
+        if (height > maxHeight) {
+            height = maxHeight;
+            width = preloader.width*(height/preloader.height);
+        }
+        if (preloader.width > maxWidth || preloader.height > maxHeight) {
           $lightbox.find('.lb-action-expand').show().on('click', function() {
             $(this).hide();
             resize(preloader.width, preloader.height);

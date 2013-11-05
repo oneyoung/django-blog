@@ -7,6 +7,7 @@
 {% block head %}
 <style>
   hr { margin-top: 0.5em }
+  #album-cover { display: none}
 </style>
 
 <script type="text/javascript">
@@ -19,6 +20,52 @@
     });
     img.wrap(a);
   }
+  function masonryfy(tag) {
+    var div = $('<div class="item"></div>');
+    $(tag).wrap(div);
+    return div;
+  }
+
+  (function($) {
+    $.fn.masonryFy = function(options) {
+      var settings = $.extend({
+        'column': 3,
+        'selector': '.item',
+      }, options);
+
+      var _this = this;
+      this.find('img').each(function () {
+        var div = $('<div class="' + settings.selector.substr(1) + '"></div>');
+        $(this).wrap(div);
+        return div;
+      });
+
+      function resizeImage(cloumn) {
+        var selector = _this.find(settings.selector);
+        var marginWidth = selector.outerWidth(true) - selector.width();
+        var width = _this.width()/settings.column - marginWidth*2;
+        selector.each(function () {
+          $(this).width(width);
+        });
+      }
+
+      resizeImage();
+      $(window).resize(resizeImage);
+
+      this.imagesLoaded(function(){
+        _this.masonry({
+          itemSelector: settings.selector,
+          isAnimated: true,
+          columnWidth: function(containerWidth) {
+            return containerWidth/3;
+          },
+        });
+      });
+
+      return this;
+    }
+  })(jQuery);
+
   $(window).load(function() {
     $('html body').animate({
       scrollTop: ($('#blog-text').offset().top - 50)
@@ -33,10 +80,13 @@
       loadCSS('{% static "plugins/lightbox2/lightbox.css" %}');
       $.getScript('{% static "plugins/lightbox2/lightbox.js" %}', function() {
         if ($('#album-images').length) { /* album */
-          $('#album-cover').remove();
+          $.getScript('{% static "plugins/jquery.masonry.min.js" %}', function() {
+            $('#album-images').masonryFy();
+          });
           $('#album-images img').each(function() {
             lightboxfy($(this), 'album');
           });
+
           $.getScript('{% static "plugins/exif-js/binaryajax.js" %}');
           $.getScript('{% static "plugins/exif-js/exif.js" %}');
         } else {
