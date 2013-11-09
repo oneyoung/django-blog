@@ -166,6 +166,15 @@
 .svg .webicon.creativecloud {
   background: url("webicons/webicon-creativecloud.svg"); }
 
+.no-svg .webicon.douban {
+  background: url("webicons/webicon-douban-m.png"); }
+
+.no-svg .webicon.douban.large {
+  background: url("webicons/webicon-douban.png"); }
+
+.no-svg .webicon.douban.small {
+  background: url("webicons/webicon-douban-s.png"); }
+
 .no-svg .webicon.dribbble {
   background: url("webicons/webicon-dribbble-m.png"); }
 
@@ -885,3 +894,12 @@
 
 .svg .webicon.zerply {
   background: url("webicons/webicon-zerply.svg"); }
+
+.no-svg .webicon.zhihu {
+  background: url("webicons/webicon-zhihu-m.png"); }
+
+.no-svg .webicon.zhihu.large {
+  background: url("webicons/webicon-zhihu.png"); }
+
+.no-svg .webicon.zhihu.small {
+  background: url("webicons/webicon-zhihu-s.png"); }
