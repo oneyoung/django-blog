@@ -107,3 +107,6 @@ html, body {
   -moz-transform: scale(1.03);
   -o-transform: scale(1.03);
 }
+
+::-moz-selection { background: #fe57a1; color: #fff; text-shadow: none; }
+::selection { background: #fe57a1; color: #fff; text-shadow: none; }
