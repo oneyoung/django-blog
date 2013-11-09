@@ -38,16 +38,9 @@ html, body {
   opacity: 0.85;
 }
 
-.blog-foot table {
-  margin: 0 auto;
-}
-
-.blog-foot table td {
-  padding: 10px;
-}
-
-#github img {
-  height: 70px;
+.blog-foot .self-intro {
+  text-align: center;
+  margin: 10px auto;
 }
 
 #bottom {
