@@ -8,7 +8,7 @@ OPTIONS = [
     # ('name', 'help_msg'),
     ('blog_name', 'The name of your blog'),
     ('blog_desc', 'Brief description of your blog'),
-    ('google_analystics_id', 'Google Analystics Tracking ID'),
+    ('google_analytics_id', 'Google Analystics Tracking ID'),
     ('disqus_shortname', 'Website shortname registered in Disqus'),
 ]
 
