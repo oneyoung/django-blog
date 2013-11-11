@@ -4,7 +4,7 @@
 {% load settings %}
 
 {% block com_head %}
-  <title>{% block title %} {% get_setting "blog_name" %} {% endblock %}</title>
+  <title> {% block title %}{% endblock %} -- {% get_setting "blog_name" %} </title>
   {% block head %}{% endblock %}
 {% endblock %}
 
