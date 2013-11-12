@@ -13,7 +13,7 @@ from forms import AdminUserForm, BlogForm
 
 class AdminLoginView(FormView):
     form_class = AdminUserForm
-    template_name = 'admin/login.html'
+    template_name = 'blog_admin/login.html'
     success_url = '/admin/'
 
     def get(self, request, *args, **kwargs):
@@ -55,7 +55,7 @@ def check_permission(cls):
 class AdminView(ListView):
     model = Blog
     queryset = Blog.objects.exclude(status='delete').order_by("-date_create")
-    template_name = 'admin/admin.html'
+    template_name = 'blog_admin/admin.html'
     paginate_by = 10
 
 
@@ -128,7 +128,7 @@ class EditView(FormView):
     * edit existig post: /?pk=primary_key
     '''
     form_class = BlogForm
-    template_name = 'admin/edit.html'
+    template_name = 'blog_admin/edit.html'
     success_url = '/admin/'
 
     @staticmethod
@@ -158,7 +158,7 @@ class EditView(FormView):
 @check_permission
 class SettingsView(FormView):
     form_class = Setting
-    template_name = 'admin/settings.html'
+    template_name = 'blog_admin/settings.html'
     success_url = '/admin/'
 
     def get(self, request, *args, **kwargs):
