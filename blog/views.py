@@ -217,7 +217,19 @@ class BlogListView(ListView):
         return super(self.__class__, self).get_context_data(**context)
 
 
+def settings_as_prop(name):
+    ''' a wrapper to get setting in class '''
+    def setting_get(self):
+        obj, created = Setting.objects.get_or_create(name=name)
+        return obj.value
+
+    return property(setting_get)
+
+
 class RSSFeed(Feed):
+    title = settings_as_prop('blog_name')
+    description = settings_as_prop('blog_desc')
+
     def link(self):
         return reverse('feed')
 
