@@ -14,13 +14,16 @@
   <div class="blog-head">
     <div class="navbar navbar-inverse blog-navbar span8">
       <div class="navbar-inner">
-        <ul class="nav">
+        <ul class="nav category-list">
           <li><a href="{% url home %}">Home</a></li>
           {% load category %}
           {% category_list as categorys %}
           {% for cat in categorys %}
           <li><a href="{% url category slug=cat.slug %}">{{ cat.name }}</a></li>
           {% endfor %}
+        </ul>
+        <ul class="nav" id="rss-link">
+          <li><a href="{% url feed %}">RSS</a></li>
         </ul>
       </div>
     </div>

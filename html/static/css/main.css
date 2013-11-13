@@ -16,9 +16,15 @@ body {
 
 .blog-head .blog-navbar {
   background-color: black;
+  font-size: x-large;
+  font-family: fantasy;
   margin: 0px;
   position: fixed;
   z-index: 100;
+}
+
+#rss-link {
+  float: right;
 }
 
 .blog-head .hero-unit {
@@ -26,6 +32,7 @@ body {
   zoom: 1;
   filter: alpha(opacity=60);
   opacity: 0.6;
+  font-family: cursive;
 }
 
 .blog-block {
