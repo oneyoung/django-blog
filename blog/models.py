@@ -22,6 +22,7 @@ class Tag(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
+    rank = models.IntegerField(blank=True, null=True, default=0)
 
     def __unicode__(self):
         return self.name
@@ -188,3 +189,13 @@ def image_delete_handler(sender, **kwargs):
     for f in [image.img, image.thumb]:
         if f:
             f.delete(save=True)
+
+
+# admin hook
+from django.contrib import admin
+
+admin.site.register(Setting)
+admin.site.register(Tag)
+admin.site.register(Category)
+admin.site.register(Blog)
+admin.site.register(Image)
