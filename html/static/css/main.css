@@ -17,7 +17,7 @@ body {
 .blog-head .blog-navbar {
   background-color: black;
   font-size: x-large;
-  font-family: fantasy;
+  font-family: Impact, fantasy;
   margin: 0px;
   position: fixed;
   z-index: 100;
@@ -32,7 +32,12 @@ body {
   zoom: 1;
   filter: alpha(opacity=60);
   opacity: 0.6;
-  font-family: cursive;
+  font-family: 'Comic Sans MS','comic sans', cursive;
+}
+
+.blog-head .hero-unit p {
+	font-size: x-large;
+	font-style: italic;
 }
 
 .blog-block {
