@@ -142,7 +142,10 @@ class EditView(FormView):
     def get(self, request, *args, **kwargs):
         pk = int(request.GET.get('pk', 0))
         blog = self._get_blog(pk)
-        return self.render_to_response({'blog': blog, 'pk': pk, 'tags': Tag.objects.all()})
+        return self.render_to_response({'blog': blog,
+                                        'pk': pk,
+                                        'tags': Tag.objects.all(),
+                                        'category': Category.objects.all()})
 
     def post(self, request, *args, **kwargs):
         pk = int(request.REQUEST.get('pk', 0))

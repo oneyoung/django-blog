@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 import json
 from django import forms
-from models import Blog
+from models import Blog, Category
 
 
 class AdminUserForm(forms.Form):
@@ -15,6 +15,7 @@ class BlogForm(forms.Form):
     raw_format = forms.ChoiceField(label='格式', choices=Blog.RAW_FORMAT_CHOICES)
     tags = forms.CharField(required=False, max_length=1024)
     status = forms.CharField(max_length=100)
+    category = forms.CharField()
 
     def saveto(self, blog):
         blog.title = self.cleaned_data['title']
@@ -25,5 +26,8 @@ class BlogForm(forms.Form):
         tags_str = self.cleaned_data['tags']
         tags = json.loads(tags_str, encoding="utf8")
         blog.update_tags(tags)
+
+        category = self.cleaned_data['category']
+        blog.category = Category.objects.get(slug=category)
 
         blog.save()

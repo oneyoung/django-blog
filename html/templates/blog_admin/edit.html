@@ -37,7 +37,7 @@
   <table>
     <tr><td>
       <div><input name="title" type="text" id="id_title" maxlength="255"{% if not blog.title %} placeholder="Input your tilte here"{% else %}value="{{ blog.title }}"{% endif %} /></div>
-    </td><tr>
+    </td></tr>
     <tr><td>
       <div><textarea name="body_raw" id="id_body_raw" rows=30 placeholder="Content of your blog">{% if blog.body_raw %}{{ blog.body_raw }}{% endif %}</textarea></div>
       <div id="id_uploadimg" style="display:none">
@@ -58,14 +58,22 @@
         </table>
         <input type="file" multiple />
       </div>
-    </td><tr>
+    </td></tr>
     <tr><td>
       {% for format in blog.RAW_FORMAT_CHOICES %}
       <label class="radio">
           <input type="radio" name="raw_format" value="{{ format.0 }}" {% if blog.raw_format == format.0 %}checked{% endif %}>{{ format.1 }}</input>
       </label>
       {% endfor %}
-    </td><tr>
+    </td></tr>
+    <tr><td>
+      <label>Category:</label>
+      <select name="category">
+      {% for cat in category %}
+        <option value="{{ cat.slug }}" {% if blog.category.slug == cat.slug %} selected {% endif %}>{{ cat.name }}</option>
+      {% endfor %}
+      </select>
+    </td></tr>
     <tr><td>
       <input name="tags" type="hidden" value="" />
       <div class="btn-group" id="id_submit">
@@ -79,7 +87,7 @@
           <li><button type="submit" name="status" value="delete" class="btn btn-danger">Delete!</button></li>
         </ul>
       </div>
-    </td><tr>
+    </td></tr>
   </table>
 </form>
 
