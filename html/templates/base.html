@@ -16,6 +16,11 @@
       <div class="navbar-inner">
         <ul class="nav">
           <li><a href="{% url home %}">Home</a></li>
+          {% load category %}
+          {% category_list as categorys %}
+          {% for cat in categorys %}
+          <li><a href="{% url category slug=cat.slug %}">{{ cat.name }}</a></li>
+          {% endfor %}
         </ul>
       </div>
     </div>
