@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse, resolve
 #from django.core import exceptions
 from django.views.generic import FormView, DetailView, ListView
 from django.contrib.syndication.views import Feed
-from models import Blog, Tag, Setting, Image
+from models import Blog, Tag, Setting, Image, Category
 from forms import AdminUserForm, BlogForm
 
 
@@ -199,6 +199,10 @@ class BlogListView(ListView):
                     name = self.kwargs.get('tag')
                     tag = Tag.objects.get(name=name)
                     queryset = tag.blog_set.all()
+                elif view_name == 'category':
+                    slug = self.kwargs.get('slug')
+                    category = Category.objects.get(slug=slug)
+                    queryset = category.blog_set.all()
                 elif view_name == 'date':
                     year = int(self.kwargs.get('year', 0))
                     month = int(self.kwargs.get('month', 0))
