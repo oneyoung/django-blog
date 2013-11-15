@@ -9,10 +9,9 @@
 {% endblock %}
 
 {% block com_body %}
-<div class="row-fluid">
-<div class="blog-body span8 offset2">
+<div class="blog-body wrapper">
   <div class="blog-head">
-    <div class="navbar navbar-inverse blog-navbar span8">
+    <div class="navbar navbar-inverse blog-navbar wrapper">
       <div class="navbar-inner">
         <ul class="nav category-list">
           <li><a href="{% url home %}">Home</a></li>
@@ -54,7 +53,6 @@
       <h5>Created by <a href="https://github.com/oneyoung/django-blog">oneyoung</a> Powered by <a href="http://www.djangoproject.com/">Django</a><h5>
     </div>
   </div>
-</div>
 </div>
 
 {% block script %}

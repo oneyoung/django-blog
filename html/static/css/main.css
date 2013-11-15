@@ -10,6 +10,11 @@ body {
   min-height: 100%;
 }
 
+.wrapper {
+  margin: auto;
+  width: 800px;
+}
+
 .blog-body {
   background-color: rgba(0, 0, 0, 0.4);
 }
@@ -43,7 +48,8 @@ body {
 .blog-block {
   background-color: white;
   padding: 30px;
-  margin: 30px 50px;
+  margin: 10px;
+  border-radius: 4px;
 }
 
 .blog-foot {
