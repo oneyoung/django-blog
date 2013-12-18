@@ -1,0 +1,47 @@
+USER=oneyoung
+HOMEDIR=/home/$USER
+
+start() {
+    echo "Starting dropbox..."
+    start-stop-daemon -b -o -c $USER -S -x $HOMEDIR/.dropbox-dist/dropbox
+}
+
+stop() {
+    echo "Stopping dropbox..."
+    start-stop-daemon -o -c $USER -K -x $HOMEDIR/.dropbox-dist/dropbox
+}
+
+status() {
+        dbpid=$(pgrep -u $USER dropbox)
+        if [ -z $dbpid ] ; then
+            echo "dropbox not running."
+        else
+            echo "dropbox running."
+        fi
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+
+  stop)
+    stop
+    ;;
+
+  restart|reload|force-reload)
+    stop
+    start
+    ;;
+
+  status)
+    status
+    ;;
+
+  *)
+    echo "Usage: /etc/init.d/dropbox {start|stop|reload|force-reload|restart|status}"
+    exit 1
+
+esac
+
+exit 0
