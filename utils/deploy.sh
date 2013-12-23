@@ -9,9 +9,9 @@ cp ./utils/django-servers.sh /etc/init.d/
 chmod +x /etc/init.d/django-servers.sh
 # backup
 cp ./utils/backup/dropbox /etc/init.d/
-cp ./utils/backup/backup.py /etc/cron.daily/
+cp ./utils/backup/backup.py /etc/cron.daily/backup-db
 chmod +x /etc/init.d/dropbox
-chmod +x /etc/cron.daily/backup.py
+chmod +x /etc/cron.daily/backup-db
 
 # enalbe services at bootup
 update-rc.d -f django-servers.sh defaults
