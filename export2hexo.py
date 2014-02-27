@@ -19,10 +19,10 @@ from blog.models import Blog
 
 SAVED_DIR = '/tmp/exports'
 front_matter_templ = '''layout: post
-title: %(title)s
+title: "%(title)s"
 date: %(date)s
 updated: %(update)s
-tags: %(tags)s
+tags: [%(tags)s]
 categories: %(categories)s
 ---
 %(content)s
@@ -44,8 +44,8 @@ print '###Exported posts will be saved in %s ###' % SAVED_DIR
 for post in filter(lambda p: p.raw_format == 'md', Blog.objects.all()):
     print 'converting: ' + post.title
     meta = {
-        'title': '\"' + post.title + '\"',
-        'tags': '[' + ','.join([t.name for t in post.tags.all()]) + ']',
+        'title': post.title,
+        'tags': ','.join([t.name for t in post.tags.all()]),
         'date': post.date_create.strftime("%Y/%m/%d %H:%M:%S"),
         'update': post.date_modify.strftime("%Y/%m/%d %H:%M:%S"),
         'categories': post.category.name if post.category else '',
