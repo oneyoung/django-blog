@@ -1,7 +1,8 @@
+#!/usr/bin/env python2
 import os
 import sys
 
-project_dir = os.path.dirname(os.path.abspath(__file__))
+project_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
 # load virtualenv if necessary
 virtualenv = os.path.join(project_dir, 'virtualenv')
@@ -52,5 +53,5 @@ for post in filter(lambda p: p.raw_format == 'md', Blog.objects.all()):
         'content': '\n'.join(post.body_raw.splitlines()),
     }
     content = front_matter_templ % meta
-    filename = str(post.id) + '-' + post.slug
+    filename = post.date_create.strftime("%Y-%m-%d-") + post.slug
     save2md(content, filename)
